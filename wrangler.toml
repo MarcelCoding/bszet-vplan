@@ -1,0 +1,11 @@
+type = "webpack"
+workers_dev = true
+account_id = "2a09613716e511a8fe8ca74abc084762"
+name = "bszet-vplan"
+
+kv_namespaces = [
+    { binding = "BSZET_VPLAN", id = "6a91e1aeade04159a26665cf7fe52518" }
+]
+
+[triggers]
+crons = ["*/15 * * * *"]
