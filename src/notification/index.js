@@ -1,6 +1,9 @@
-import { notifyDiscord } from "./discord";
 import { notifyTelegram } from "./telegram";
+import { notifyDiscord } from "./discord";
 
-export async function notify(message) {
-  return Promise.all([notifyDiscord(message), notifyTelegram(message)]);
+export async function notify(message, image, messageWithoutImage) {
+  return Promise.all([
+    notifyDiscord(messageWithoutImage, image),
+    notifyTelegram(message, image),
+  ]);
 }
