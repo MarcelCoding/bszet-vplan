@@ -12,7 +12,7 @@ export async function vPlanCron() {
 
   if (modified && (!lastModified || modified !== lastModified)) {
     const passedTime = formatRelativeTime(Date.parse(modified) - Date.now());
-    const message = `VPlan has been changed ${passedTime}. To view the changes visit ${V_PLAN_URL}.`;
+    const message = `VPlan has been updated ${passedTime}. To view the changes visit ${V_PLAN_URL}.`;
 
     return Promise.all([updateLastModified(modified), notify(message)]);
   }
