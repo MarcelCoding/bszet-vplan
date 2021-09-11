@@ -14,7 +14,7 @@ export async function vPlanCron() {
     const passedTime = formatRelativeTime(Date.parse(modified) - Date.now());
 
     const message = `VPlan has been updated ${passedTime}.`;
-    const messageWithoutImage = `${message}. To view the changes visit ${V_PLAN_URL}.`;
+    const messageWithoutImage = `${message} To view the changes visit ${V_PLAN_URL}.`;
 
     return Promise.all([
       updateLastModified(modified),
