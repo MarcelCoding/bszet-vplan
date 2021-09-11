@@ -39,5 +39,5 @@ export async function pdf2Img(pdf) {
     body: data,
   });
 
-  return response.arrayBuffer();
+  return response.status !== 200 ? null : response.arrayBuffer();
 }
