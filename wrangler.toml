@@ -1,5 +1,5 @@
 type = "webpack"
-workers_dev = true
+workers_dev = false
 account_id = "2a09613716e511a8fe8ca74abc084762"
 name = "bszet-vplan"
 
