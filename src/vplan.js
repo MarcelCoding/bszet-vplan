@@ -1,30 +1,36 @@
-import { notifyDiscord, notifyTelegram } from "./notification";
+import { formatRelativeTime } from "./utils";
+import { notify, notifyDiscord, notifyTelegram } from "./notification";
 
 const V_PLAN_URL =
   "https://geschuetzt.bszet.de/s-lk-vw/Vertretungsplaene/vertretungsplan-bgy.pdf";
 
 export async function vPlanCron() {
-  const [lastModified, oldLastModified] = await Promise.all([
+  const [modified, lastModified] = await Promise.all([
+    loadModified(),
     loadLastModified(),
-    BSZET_VPLAN.get("last-modified"),
   ]);
 
-  if (lastModified && (!oldLastModified || lastModified !== oldLastModified)) {
-    const message = `VPlan has been changed. ${V_PLAN_URL}`;
+  if (modified && (!lastModified || modified !== lastModified)) {
+    const passedTime = formatRelativeTime(Date.parse(modified) - Date.now());
+    const message = `VPlan has been changed ${passedTime}. To view the changes visit ${V_PLAN_URL}.`;
 
-    return await Promise.all([
-      BSZET_VPLAN.put("last-modified", lastModified),
-      notifyTelegram(JSON.parse(TELEGRAM_CHAT_IDS), message),
-      notifyDiscord(JSON.parse(DISCORD_HOOKS), message),
-    ]);
+    return Promise.all([updateLastModified(modified), notify(message)]);
   }
 }
 
-async function loadLastModified() {
+async function loadModified() {
   const response = await fetch(V_PLAN_URL, {
     method: "HEAD",
     headers: { Authorization: "Basic " + btoa(USER + ":" + PASS) },
   });
 
   return response.headers.get("last-modified");
+}
+
+async function loadLastModified() {
+  return BSZET_VPLAN.get("last-modified");
+}
+
+async function updateLastModified(modified) {
+  return BSZET_VPLAN.put("last-modified", modified);
 }
