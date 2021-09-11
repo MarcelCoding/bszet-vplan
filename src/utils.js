@@ -28,3 +28,15 @@ export function formatRelativeTime(diff) {
 function isInRange(start, value, end) {
   return start < value && value < end;
 }
+
+export async function pdf2Img(pdf) {
+  const data = new FormData();
+  data.append("file", new Blob([pdf]));
+
+  const response = await fetch("https://pdf2img.schripke.xyz:5000/pdf2img", {
+    method: "POST",
+    body: data,
+  });
+
+  return response.arrayBuffer();
+}
