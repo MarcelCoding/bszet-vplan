@@ -9,3 +9,11 @@ kv_namespaces = [
 
 [triggers]
 crons = ["*/15 * * * *"]
+
+
+[env.staging]
+name = "bszet-vplan-staging"
+
+kv_namespaces = [
+    { binding = "BSZET_VPLAN", id = "ad46f5f8b0334fde966c0d59aad2f285" }
+]
