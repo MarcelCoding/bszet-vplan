@@ -11,7 +11,7 @@ export async function vPlanCron(): Promise<unknown> {
     loadLastModified(),
   ]);
 
-  if (modified && (!lastModified || modified !== lastModified)) {
+  if (modified && (true || !lastModified || modified !== lastModified)) {
     const passedTime = formatRelativeTime(Date.parse(modified) - Date.now());
 
     const iteration = getIteration();
@@ -49,7 +49,7 @@ async function updateLastModified(modified: string): Promise<void> {
   return BSZET_VPLAN.put("last-modified", modified);
 }
 
-export async function fetchVPlan(): Promise<ArrayBuffer | null> {
+export async function fetchVPlan(): Promise<string[] | null> {
   const response = await fetch(V_PLAN_URL, {
     // @ts-ignore
     headers: { Authorization: "Basic " + btoa(USER + ":" + PASS) },

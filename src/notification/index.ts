@@ -3,7 +3,7 @@ import { notifyDiscord } from "./discord";
 
 export async function notify(
   message: string,
-  image: BlobPart | null,
+  image: string[] | null,
   messageWithoutImage: string
 ) {
   return Promise.all([

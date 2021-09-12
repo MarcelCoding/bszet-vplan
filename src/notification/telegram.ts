@@ -1,52 +1,53 @@
 // @ts-ignore
 const CHAT_IDS: number[] = JSON.parse(TELEGRAM_CHAT_IDS);
+// @ts-ignore
+const API_BASE_URL = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
+const IMAGE_BASE_URL =
+  "https://bszet-vplan-staging.marcelcoding.workers.dev/image";
 
 export async function notifyTelegram(
   message: string,
-  image: BlobPart | null,
+  images: string[] | null,
   messageWithoutImage: string
 ) {
-  // @ts-ignore
-  const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
-
   return Promise.all(
-    CHAT_IDS.map((id) => request(url, id, message, image, messageWithoutImage))
+    images?.length
+      ? CHAT_IDS.map((chatId) => sendImages(chatId, message, images))
+      : CHAT_IDS.map((chatId) => sendMessage(chatId, messageWithoutImage))
   );
 }
 
-async function request(
-  api: string,
-  id: number,
-  message: string,
-  image: BlobPart | null,
-  messageWithoutImage: string
-) {
-  return image
-    ? fetch(`${api}/sendDocument`, imageMessage(id, message, image))
-    : fetch(`${api}/sendMessage`, textMessage(id, messageWithoutImage));
-}
+async function sendImages(chatId: number, message: string, images: string[]) {
+  let url: string;
+  let body: { media?: string[]; photo?: string };
 
-function imageMessage(chatId: number, message: string, image: BlobPart) {
-  const data = new FormData();
-  data.append("chat_id", `${chatId}`);
-  data.append("document", new Blob([image]), "vplan.jpg");
-  data.append("caption", message);
-  data.append("disable_notification", "true");
+  if (images.length === 1) {
+    url = "sendPhoto";
+    body = { photo: `${IMAGE_BASE_URL}/${images[0]}` };
+  } else {
+    url = "sendMediaGroup";
+    body = { media: images.map((image) => `${IMAGE_BASE_URL}/${image}`) };
+  }
 
-  return {
-    method: "POST",
-    body: data,
-  };
-}
-
-function textMessage(chatId: number, message: string) {
-  return {
+  return fetch(`${API_BASE_URL}/${url}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      chat_id: chatId,
-      text: message,
-      disable_notification: true,
-    }),
-  };
+    body: createBody(chatId, body),
+  });
+}
+
+async function sendMessage(chatId: number, message: string) {
+  return fetch(`${API_BASE_URL}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: createBody(chatId, { text: message }),
+  });
+}
+
+function createBody(chatId: number, body: object): string {
+  return JSON.stringify({
+    chat_id: chatId,
+    disable_notification: true,
+    ...body,
+  });
 }
