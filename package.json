@@ -2,10 +2,11 @@
   "name": "bszet-vplan",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "dist/main.js",
   "scripts": {
+    "build": "webpack",
     "publish": "wrangler publish --env staging",
-    "publish:prod": "wrangler publish"
+    "publish:prod": "wrangler publish --env prod"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,10 @@
   "devDependencies": {
     "@cloudflare/workers-types": "2.2.2",
     "prettier": "2.4.0",
+    "ts-loader": "9.2.5",
+    "typescript": "4.4.3",
+    "webpack": "5.52.1",
+    "webpack-cli": "4.8.0",
     "wrangler": "0.0.2"
   }
 }

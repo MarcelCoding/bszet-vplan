@@ -1,15 +1,22 @@
-type = "webpack"
+type = "javascript"
 workers_dev = false
 account_id = "2a09613716e511a8fe8ca74abc084762"
+
+[triggers]
+crons = ["*/15 * * * *"]
+
+[build]
+command = "npm run build"
+
+[build.upload]
+format = "service-worker"
+
+[env.prod]
 name = "bszet-vplan"
 
 kv_namespaces = [
     { binding = "BSZET_VPLAN", id = "6a91e1aeade04159a26665cf7fe52518" }
 ]
-
-[triggers]
-crons = ["*/15 * * * *"]
-
 
 [env.staging]
 name = "bszet-vplan-staging"

@@ -1,6 +1,6 @@
 import { vPlanCron } from "./vplan";
 
-async function handleCron() {
+async function handleCron(): Promise<unknown> {
   // if more, use Promise.all
   return vPlanCron();
 }

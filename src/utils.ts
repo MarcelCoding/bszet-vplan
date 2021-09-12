@@ -3,7 +3,7 @@ const relativeFormat = new Intl.RelativeTimeFormat("de", {
   style: "long",
 });
 
-export function formatRelativeTime(diff) {
+export function formatRelativeTime(diff: number): string {
   const secDiff = diff / 1000;
 
   if (isInRange(-60, secDiff, 60)) {
@@ -25,11 +25,11 @@ export function formatRelativeTime(diff) {
   return relativeFormat.format(Math.round(hourDiff / 24), "days");
 }
 
-function isInRange(start, value, end) {
+function isInRange(start: number, value: number, end: number) {
   return start < value && value < end;
 }
 
-export async function pdf2Img(pdf) {
+export async function pdf2Img(pdf: BlobPart): Promise<ArrayBuffer | null> {
   const data = new FormData();
   data.append("file", new Blob([pdf]));
 
@@ -37,6 +37,7 @@ export async function pdf2Img(pdf) {
   const response = await fetch(`${API_URL}/pdf2img`, {
     method: "POST",
     body: data,
+    // @ts-ignore
     headers: { Authorization: `Bearer ${API_KEY}` },
   });
 

@@ -1,6 +1,7 @@
-const HOOKS = JSON.parse(DISCORD_HOOKS);
+// @ts-ignore
+const HOOKS: string[] = JSON.parse(DISCORD_HOOKS);
 
-export async function notifyDiscord(message) {
+export async function notifyDiscord(message: string) {
   const request = {
     method: "POST",
     headers: { "Content-Type": "application/json" },

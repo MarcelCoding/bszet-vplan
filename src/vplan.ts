@@ -5,7 +5,7 @@ import { getIteration } from "./iteration";
 const V_PLAN_URL =
   "https://geschuetzt.bszet.de/s-lk-vw/Vertretungsplaene/vertretungsplan-bgy.pdf";
 
-export async function vPlanCron() {
+export async function vPlanCron(): Promise<unknown> {
   const [modified, lastModified] = await Promise.all([
     loadModified(),
     loadLastModified(),
@@ -29,25 +29,29 @@ export async function vPlanCron() {
   }
 }
 
-async function loadModified() {
+async function loadModified(): Promise<string | null> {
   const response = await fetch(V_PLAN_URL, {
     method: "HEAD",
+    // @ts-ignore
     headers: { Authorization: "Basic " + btoa(USER + ":" + PASS) },
   });
 
   return response.headers.get("last-modified");
 }
 
-async function loadLastModified() {
+async function loadLastModified(): Promise<string> {
+  // @ts-ignore
   return BSZET_VPLAN.get("last-modified");
 }
 
-async function updateLastModified(modified) {
+async function updateLastModified(modified: string): Promise<void> {
+  // @ts-ignore
   return BSZET_VPLAN.put("last-modified", modified);
 }
 
-export async function fetchVPlan() {
+export async function fetchVPlan(): Promise<ArrayBuffer | null> {
   const response = await fetch(V_PLAN_URL, {
+    // @ts-ignore
     headers: { Authorization: "Basic " + btoa(USER + ":" + PASS) },
   });
 
