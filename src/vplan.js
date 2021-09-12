@@ -1,5 +1,6 @@
 import { formatRelativeTime, pdf2Img } from "./utils";
 import { notify } from "./notification";
+import { getIteration } from "./iteration";
 
 const V_PLAN_URL =
   "https://geschuetzt.bszet.de/s-lk-vw/Vertretungsplaene/vertretungsplan-bgy.pdf";
@@ -13,12 +14,17 @@ export async function vPlanCron() {
   if (modified && (!lastModified || modified !== lastModified)) {
     const passedTime = formatRelativeTime(Date.parse(modified) - Date.now());
 
-    const message = `VPlan has been updated ${passedTime}.`;
-    const messageWithoutImage = `${message} To view the changes visit ${V_PLAN_URL}.`;
+    const iteration = getIteration();
+    const message = `Der Vertretungsplan wurde ${passedTime} aktualisiert.`;
+    const messageWithoutImage = `${message} Hier die Änderungen ansehen ${V_PLAN_URL}. Der aktuelle Turnus ist ${iteration}.`;
 
     return Promise.all([
       updateLastModified(modified),
-      notify(message, await fetchVPlan(), messageWithoutImage),
+      notify(
+        `${message} Der aktuelle Turnus ist ${iteration}.`,
+        await fetchVPlan(),
+        messageWithoutImage
+      ),
     ]);
   }
 }
