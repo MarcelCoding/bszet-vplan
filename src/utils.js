@@ -36,6 +36,7 @@ export async function pdf2Img(pdf) {
   const response = await fetch("https://pdf2img.schripke.xyz:5000/pdf2img", {
     method: "POST",
     body: data,
+    headers: { Authorization: `Bearer ${API_KEY}` },
   });
 
   return response.status !== 200 ? null : response.arrayBuffer();
