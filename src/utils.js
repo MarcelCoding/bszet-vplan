@@ -1,4 +1,4 @@
-const relativeFormat = new Intl.RelativeTimeFormat("en", {
+const relativeFormat = new Intl.RelativeTimeFormat("de", {
   numeric: "auto",
   style: "long",
 });
