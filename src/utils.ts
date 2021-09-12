@@ -29,7 +29,7 @@ function isInRange(start: number, value: number, end: number) {
   return start < value && value < end;
 }
 
-export async function pdf2Img(pdf: BlobPart): Promise<ArrayBuffer | null> {
+export async function pdf2Img(pdf: BlobPart): Promise<string[] | null> {
   const data = new FormData();
   data.append("file", new Blob([pdf]));
 
@@ -41,5 +41,5 @@ export async function pdf2Img(pdf: BlobPart): Promise<ArrayBuffer | null> {
     headers: { Authorization: `Bearer ${API_KEY}` },
   });
 
-  return response.status !== 200 ? null : response.arrayBuffer();
+  return response.status !== 200 ? null : response.json();
 }

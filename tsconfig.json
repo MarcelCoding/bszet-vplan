@@ -5,6 +5,10 @@
     "noImplicitAny": true,
     "module": "ESNext",
     "target": "ESNext",
+    "lib": [
+      "ESNext",
+      "WebWorker"
+    ],
     "allowJs": false,
     "moduleResolution": "node",
     "types": [
