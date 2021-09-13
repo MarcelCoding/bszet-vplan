@@ -1,45 +1,70 @@
-const relativeFormat = new Intl.RelativeTimeFormat("de", {
+const locale = "de";
+
+const relativeTimeFormat = new Intl.RelativeTimeFormat(locale, {
   numeric: "auto",
   style: "long",
+});
+
+const dateTimeFormat = new Intl.DateTimeFormat(locale, {
+  timeStyle: "short",
+  dateStyle: "short",
+  timeZone: "Europe/Berlin",
 });
 
 export function formatRelativeTime(diff: number): string {
   const secDiff = diff / 1000;
 
   if (isInRange(-60, secDiff, 60)) {
-    return relativeFormat.format(Math.round(secDiff), "seconds");
+    return relativeTimeFormat.format(Math.round(secDiff), "seconds");
   }
 
   const minDiff = secDiff / 60;
 
   if (isInRange(-60, minDiff, 60)) {
-    return relativeFormat.format(Math.round(minDiff), "minutes");
+    return relativeTimeFormat.format(Math.round(minDiff), "minutes");
   }
 
   const hourDiff = minDiff / 60;
 
   if (isInRange(-24, hourDiff, 24)) {
-    return relativeFormat.format(Math.round(hourDiff), "hours");
+    return relativeTimeFormat.format(Math.round(hourDiff), "hours");
   }
 
-  return relativeFormat.format(Math.round(hourDiff / 24), "days");
+  return relativeTimeFormat.format(Math.round(hourDiff / 24), "days");
 }
 
 function isInRange(start: number, value: number, end: number) {
   return start < value && value < end;
 }
 
-export async function pdf2Img(pdf: BlobPart): Promise<string[] | null> {
+export function formatDateTime(date: Date) {
+  return dateTimeFormat.format(date);
+}
+
+export async function pdf2Img(
+  pdf: BlobPart,
+  line1: string,
+  line2: string,
+  line3: string
+): Promise<string[] | null> {
   const data = new FormData();
   data.append("file", new Blob([pdf]));
 
-  // @ts-ignore
-  const response = await fetch(`${API_URL}/pdf2img`, {
-    method: "POST",
-    body: data,
+  const params = new URLSearchParams();
+  params.append("top-text", line1);
+  params.append("top2-text", line2);
+  params.append("bottom-text", line3);
+
+  const response = await fetch(
     // @ts-ignore
-    headers: { Authorization: `Bearer ${API_KEY}` },
-  });
+    `${API_URL}/pdf2img?${params.toString()}`,
+    {
+      method: "POST",
+      body: data,
+      // @ts-ignore
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    }
+  );
 
   return response.status !== 200 ? null : response.json();
 }

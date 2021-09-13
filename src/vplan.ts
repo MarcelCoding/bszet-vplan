@@ -1,4 +1,4 @@
-import { formatRelativeTime, pdf2Img } from "./utils";
+import { formatDateTime, formatRelativeTime, pdf2Img } from "./utils";
 import { notify } from "./notification";
 import { getIteration } from "./iteration";
 
@@ -22,7 +22,11 @@ export async function vPlanCron(): Promise<unknown> {
       updateLastModified(modified),
       notify(
         `${message} Der aktuelle Turnus ist ${iteration}.`,
-        await fetchVPlan(),
+        await fetchVPlan(
+          formatDateTime(new Date(modified)),
+          `aktualisiert ${passedTime}`,
+          `Turnus ${iteration}`
+        ),
         messageWithoutImage
       ),
     ]);
@@ -49,7 +53,11 @@ async function updateLastModified(modified: string): Promise<void> {
   return BSZET_VPLAN.put("last-modified", modified);
 }
 
-export async function fetchVPlan(): Promise<string[] | null> {
+export async function fetchVPlan(
+  line1: string,
+  line2: string,
+  line3: string
+): Promise<string[] | null> {
   const response = await fetch(V_PLAN_URL, {
     // @ts-ignore
     headers: { Authorization: "Basic " + btoa(USER + ":" + PASS) },
@@ -57,5 +65,5 @@ export async function fetchVPlan(): Promise<string[] | null> {
 
   const data = await response.arrayBuffer();
 
-  return pdf2Img(data);
+  return pdf2Img(data, line1, line2, line3);
 }
