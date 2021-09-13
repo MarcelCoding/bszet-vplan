@@ -8,7 +8,7 @@ async function handleCron(): Promise<unknown> {
 
 const router = Router()
   .get("/image/:id", (request) =>
-    fetch(`https://pdf2img.schripke.xyz:5000/img/${request.params?.id}`, {
+    fetch(`https://pdf2img.schripke.xyz/img/${request.params?.id}`, {
       // @ts-ignore
       headers: { Authorization: `Bearer ${API_KEY}` },
     })
