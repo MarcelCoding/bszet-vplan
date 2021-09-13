@@ -11,7 +11,7 @@ export async function vPlanCron(): Promise<unknown> {
     loadLastModified(),
   ]);
 
-  if (modified && (true || !lastModified || modified !== lastModified)) {
+  if (modified && (!lastModified || modified !== lastModified)) {
     const passedTime = formatRelativeTime(Date.parse(modified) - Date.now());
 
     const iteration = getIteration();

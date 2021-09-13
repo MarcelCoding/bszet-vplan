@@ -9,7 +9,7 @@ export async function notifyTelegram(
   message: string,
   images: string[] | null,
   messageWithoutImage: string
-) {
+): Promise<unknown> {
   return Promise.all(
     images?.length
       ? CHAT_IDS.map((chatId) => sendImages(chatId, message, images))
@@ -17,19 +17,32 @@ export async function notifyTelegram(
   );
 }
 
-async function sendImages(chatId: number, message: string, images: string[]) {
+async function sendImages(
+  chatId: number,
+  message: string,
+  images: string[]
+): Promise<unknown> {
   let url: string;
-  let body: { media?: string[]; photo?: string };
+  let body: {
+    media?: { type: "photo"; media: string; caption?: string }[];
+    photo?: string;
+  };
 
   if (images.length === 1) {
     url = "sendPhoto";
     body = { photo: `${IMAGE_BASE_URL}/${images[0]}` };
   } else {
     url = "sendMediaGroup";
-    body = { media: images.map((image) => `${IMAGE_BASE_URL}/${image}`) };
+    body = {
+      media: images.map((image) => ({
+        type: "photo",
+        media: `${IMAGE_BASE_URL}/${image}`,
+      })),
+    };
+    body.media![0].caption = message;
   }
 
-  return fetch(`${API_BASE_URL}/${url}`, {
+  return await fetch(`${API_BASE_URL}/${url}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: createBody(chatId, body),
