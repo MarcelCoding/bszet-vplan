@@ -24,7 +24,7 @@ export async function vPlanCron(): Promise<unknown> {
         `${message} Der aktuelle Turnus ist ${iteration}.`,
         await fetchVPlan(
           formatDateTime(new Date(modified)),
-          `aktualisiert ${passedTime}`,
+          `${passedTime} aktualisiert`,
           `Turnus ${iteration}`
         ),
         messageWithoutImage

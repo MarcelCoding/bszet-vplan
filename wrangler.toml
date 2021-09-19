@@ -1,6 +1,7 @@
 type = "javascript"
 workers_dev = true
 account_id = "2a09613716e511a8fe8ca74abc084762"
+compatibility_date = "2021-09-19"
 
 [triggers]
 crons = ["*/15 * * * *"]
@@ -11,7 +12,7 @@ command = "npm run build"
 [build.upload]
 format = "service-worker"
 
-[env.prod]
+[env.production]
 name = "bszet-vplan"
 
 kv_namespaces = [
