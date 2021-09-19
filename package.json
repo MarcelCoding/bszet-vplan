@@ -2,25 +2,26 @@
   "name": "bszet-vplan",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/main.js",
+  "main": "dist/worker.js",
   "scripts": {
     "build": "webpack",
     "publish": "wrangler publish --env staging",
-    "publish:prod": "wrangler publish --env prod"
+    "publish:prod": "wrangler publish --env production"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "itty-router": "2.4.2"
+    "itty-router": "2.4.2",
+    "toucan-js": "2.5.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "2.2.2",
+    "@cloudflare/wrangler": "1.19.3",
     "prettier": "2.4.0",
     "ts-loader": "9.2.5",
     "typescript": "4.4.3",
     "webpack": "5.52.1",
-    "webpack-cli": "4.8.0",
-    "wrangler": "0.0.2"
+    "webpack-cli": "4.8.0"
   }
 }

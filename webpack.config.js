@@ -3,6 +3,8 @@ const path = require("path");
 module.exports = {
   entry: "./src/index.ts",
   mode: "production",
+  target: "webworker",
+  devtool: "source-map",
   module: {
     rules: [
       {
@@ -13,10 +15,10 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [".ts"],
+    extensions: [".ts", ".js"],
   },
   output: {
-    filename: "main.js",
+    filename: "worker.js",
     path: path.resolve(__dirname, "dist"),
   },
 };
