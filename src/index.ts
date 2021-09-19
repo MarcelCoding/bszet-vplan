@@ -14,7 +14,6 @@ const router = Router()
       headers: { Authorization: `Bearer ${API_KEY}` },
     })
   )
-  .get("/error", () => Promise.reject(new Error("Test123")))
   .all("*", () => new Response("Not Found", { status: 404 }));
 
 addEventListener("fetch", (event) => {
