@@ -12,32 +12,32 @@ enum Group {
 
 class Time {
   constructor(
-      private readonly _start: number,
-      private readonly _end: number
+      private readonly start0: number,
+      private readonly end0: number
   ) {}
 
   static fromBlock(block: number): Time {
     return new Time(block * 2 - 1, block * 2);
   }
 
-  public get start() { return this._start; }
-  public get end() { return this._end; }
+  public get start() { return this.start0; }
+  public get end() { return this.end0; }
 }
 
 class ScheduledSubject {
     constructor(
-        private readonly _name: string,
-        private readonly _room: string,
-        private readonly _time: Time,
-        private readonly _iteration: Iteration,
-        private readonly _group: Group = Group.ALL
+        private readonly name0: string,
+        private readonly room0: string,
+        private readonly time0: Time,
+        private readonly iteration0: Iteration,
+        private readonly group0: Group = Group.ALL
     ) {}
 
-    public get name() { return this._name; }
-    public get room() { return this._room; }
-    public get time() { return this._time; }
-    public get iteration() { return this._iteration; }
-    public get group() { return this._group; }
+    public get name() { return this.name0; }
+    public get room() { return this.room0; }
+    public get time() { return this.time0; }
+    public get iteration() { return this.iteration0; }
+    public get group() { return this.group0; }
 }
 
 
