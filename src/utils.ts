@@ -42,13 +42,13 @@ export function formatDateTime(date: Date) {
 }
 
 export async function pdf2Img(
-  pdf: BlobPart,
+  pdf: Blob,
   line1: string,
   line2: string,
   line3: string
-): Promise<string[] | null> {
+): Promise<string[]> {
   const data = new FormData();
-  data.append("file", new Blob([pdf]));
+  data.append("file", pdf);
 
   const params = new URLSearchParams();
   params.append("top-text", line1);
@@ -66,5 +66,11 @@ export async function pdf2Img(
     }
   );
 
-  return response.status !== 200 ? null : response.json();
+  if (response.status !== 200) {
+    throw new Error(
+      `Error while converting pdf file to images: ${response.status} ${response.statusText}`
+    );
+  }
+
+  return response.json();
 }

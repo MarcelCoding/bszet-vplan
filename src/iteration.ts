@@ -1,7 +1,9 @@
 // https://frei.bszet.de/inhalt/Blockplaene/BGy/Schuljahresablauf%20BSZ%202021-2022.pdf
 // "day since 1970": "iteration"
 
-const DATA: { [day: number]: number } = {
+import { Day, Iteration } from "./domain";
+
+const DATA: { [day: number]: Iteration } = {
   18876: 1, // "06.09.2021"
   18883: 2, // "13.09.2021"
   18890: 1, // "20.09.2021"
@@ -43,8 +45,10 @@ const DATA: { [day: number]: number } = {
   19184: 1, // "11.07.2022"
 };
 
-export function getIteration(): number {
-  const nextDay = Math.round(Date.now() / 1000 / 60 / 60 / 24 + 2);
+export function getIteration(date?: Date): Iteration | null {
+  const nextDay = Math.round(
+    (date?.getTime() ?? Date.now()) / 1000 / 60 / 60 / 24 + 2
+  );
 
   for (let i = nextDay - 6; i <= nextDay; i++) {
     if (DATA[i]) {
@@ -52,5 +56,12 @@ export function getIteration(): number {
     }
   }
 
-  return -1;
+  return null;
+}
+
+export function applyIteration(iteration: Iteration, timetable: Day): Day {
+  return timetable.filter(
+    (lesson) =>
+      typeof lesson.iteration !== "number" || lesson.iteration === iteration
+  );
 }
