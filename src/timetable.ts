@@ -71,7 +71,7 @@ export const data = {
       new ScheduledSubject("D", "B 6", Time.fromBlock(1), Iteration.ALWAYS),
       new ScheduledSubject("Ma", "B 10", Time.fromBlock(2), Iteration.ALWAYS),
       new ScheduledSubject("IS", "B 3", Time.fromBlock(3), Iteration.ALWAYS),
-      new ScheduledSubject("Ph", "B 112", Time.fromBlock(4), Iteration.ALWAYS)
+      new ScheduledSubject("Ph", "B 110", Time.fromBlock(4), Iteration.ALWAYS)
   ],
   fri: [
       new ScheduledSubject("LF 6", "B 441", Time.fromBlock(1), Iteration.ALWAYS, Group.GROUP2),
