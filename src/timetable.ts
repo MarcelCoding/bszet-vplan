@@ -28,8 +28,8 @@ import {
 
 export const TIMETABLE: Timetable = {
   mon: [
-    { time: BlOCK_1, subject: W_R, place: room("B", 8) },
-    { time: BlOCK_2, iteration: 1, subject: EN, place: room("B", 12) },
+    { time: BlOCK_2, subject: W_R, place: room("B", 8) },
+    { time: BlOCK_3, iteration: 1, subject: EN, place: room("B", 12) },
     { time: BlOCK_3, iteration: 2, subject: MA, place: room("B", 10) },
     { time: BlOCK_4, subject: LF_6, place: room("B", 411), group: 1 },
     { time: BlOCK_4, subject: IS, place: room("B", 3), group: 2 },
