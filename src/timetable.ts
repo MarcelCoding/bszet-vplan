@@ -1,84 +1,68 @@
-enum Iteration {
-  ALWAYS,
-  WEEK1,
-  WEEK2
-}
+import {
+  BK_1,
+  BK_2,
+  BlOCK_1,
+  BlOCK_2,
+  BlOCK_3,
+  BlOCK_4,
+  BlOCK_5,
+  CH,
+  D,
+  EN,
+  ETH,
+  FRZ,
+  GE,
+  IS,
+  LF_1_2,
+  LF_5,
+  LF_6,
+  LIT,
+  MA,
+  PH,
+  room,
+  RU,
+  SP,
+  Timetable,
+  W_R,
+} from "./domain";
 
-enum Group {
-  ALL,
-  GROUP1,
-  GROUP2
-}
-
-class Time {
-  constructor(
-      private readonly start0: number,
-      private readonly end0: number
-  ) {}
-
-  static fromBlock(block: number): Time {
-    return new Time(block * 2 - 1, block * 2);
-  }
-
-  public get start() { return this.start0; }
-  public get end() { return this.end0; }
-}
-
-class ScheduledSubject {
-    constructor(
-        private readonly name0: string,
-        private readonly room0: string,
-        private readonly time0: Time,
-        private readonly iteration0: Iteration,
-        private readonly group0: Group = Group.ALL
-    ) {}
-
-    public get name() { return this.name0; }
-    public get room() { return this.room0; }
-    public get time() { return this.time0; }
-    public get iteration() { return this.iteration0; }
-    public get group() { return this.group0; }
-}
-
-
-
-export const data = {
+export const TIMETABLE: Timetable = {
   mon: [
-      new ScheduledSubject("W/R", "B 8", Time.fromBlock(2), Iteration.ALWAYS),
-      new ScheduledSubject("En", "B 12", Time.fromBlock(3), Iteration.WEEK1),
-      new ScheduledSubject("Ma", "B 10", Time.fromBlock(3), Iteration.WEEK2),
-      new ScheduledSubject("LF 6", "B 411", Time.fromBlock(4), Iteration.ALWAYS, Group.GROUP1),
-      new ScheduledSubject("IS", "B 3", Time.fromBlock(4), Iteration.ALWAYS, Group.GROUP2),
-      new ScheduledSubject("BK 1", "A 06", Time.fromBlock(5), Iteration.WEEK2),
-      new ScheduledSubject("Lit", "B 4", Time.fromBlock(5), Iteration.WEEK2)
+    { time: BlOCK_1, subject: W_R, place: room("B", 8) },
+    { time: BlOCK_2, iteration: 1, subject: EN, place: room("B", 12) },
+    { time: BlOCK_3, iteration: 2, subject: MA, place: room("B", 10) },
+    { time: BlOCK_4, subject: LF_6, place: room("B", 411), group: 1 },
+    { time: BlOCK_4, subject: IS, place: room("B", 3), group: 2 },
+    { time: BlOCK_5, iteration: 2, subject: BK_1, place: room("A", "06") },
+    { time: BlOCK_5, iteration: 2, subject: LIT, place: room("B", 4) },
   ],
   tue: [
-      new ScheduledSubject("Ma", "B 12", Time.fromBlock(1), Iteration.ALWAYS),
-      new ScheduledSubject("En", "B 204", Time.fromBlock(2), Iteration.ALWAYS),
-      new ScheduledSubject("LF 1+2", "B 03", Time.fromBlock(3), Iteration.ALWAYS),
-      new ScheduledSubject("BK 2", "A 06", Time.fromBlock(4), Iteration.WEEK1),
-      new ScheduledSubject("Sp", "Kästner", Time.fromBlock(4), Iteration.WEEK2)
+    { time: BlOCK_1, subject: MA, place: room("B", 12) },
+    { time: BlOCK_2, subject: EN, place: room("B", 204) },
+    { time: BlOCK_3, subject: LF_1_2, place: room("B", "03") },
+    { time: BlOCK_4, iteration: 1, subject: BK_2, place: room("A", "06") },
+    { time: BlOCK_4, iteration: 2, subject: SP, place: "Kästner" },
   ],
   wed: [
-      new ScheduledSubject("Ge", "B 108", Time.fromBlock(1), Iteration.ALWAYS),
-      new ScheduledSubject("IS", "B 3", Time.fromBlock(2), Iteration.ALWAYS),
-      new ScheduledSubject("Eth", "B 306", Time.fromBlock(3), Iteration.WEEK1),
-      new ScheduledSubject("LF 5", "B 405", Time.fromBlock(3), Iteration.WEEK2),
-      new ScheduledSubject("Frz", "A 102", Time.fromBlock(4), Iteration.ALWAYS),
-      new ScheduledSubject("Ru", "B 4", Time.fromBlock(4), Iteration.ALWAYS)
+    { time: BlOCK_1, subject: GE, place: room("B", 108) },
+    { time: BlOCK_2, subject: IS, place: room("B", 3) },
+    { time: BlOCK_3, iteration: 1, subject: ETH, place: room("B", 306) },
+    { time: BlOCK_3, iteration: 2, subject: LF_5, place: room("B", 405) },
+    { time: BlOCK_4, subject: FRZ, place: room("A", 102) },
+    { time: BlOCK_4, subject: RU, place: room("B", 4) },
   ],
   thu: [
-      new ScheduledSubject("D", "B 6", Time.fromBlock(1), Iteration.ALWAYS),
-      new ScheduledSubject("Ma", "B 10", Time.fromBlock(2), Iteration.ALWAYS),
-      new ScheduledSubject("IS", "B 3", Time.fromBlock(3), Iteration.ALWAYS),
-      new ScheduledSubject("Ph", "B 110", Time.fromBlock(4), Iteration.ALWAYS)
+    { time: BlOCK_1, subject: D, place: room("B", 6) },
+    { time: BlOCK_2, subject: MA, place: room("B", 10) },
+    { time: BlOCK_3, subject: IS, place: room("B", 3) },
+    { time: BlOCK_4, subject: PH, place: room("B", 110) },
   ],
   fri: [
-      new ScheduledSubject("LF 6", "B 441", Time.fromBlock(1), Iteration.ALWAYS, Group.GROUP2),
-      new ScheduledSubject("IS", "B 312", Time.fromBlock(1), Iteration.ALWAYS, Group.GROUP1),
-      new ScheduledSubject("Ch", "B 9", Time.fromBlock(2), Iteration.ALWAYS),
-      new ScheduledSubject("D", "B 6", Time.fromBlock(3), Iteration.ALWAYS),
-      new ScheduledSubject("Frz", "A 102", Time.fromBlock(4), Iteration.ALWAYS),
-      new ScheduledSubject("Ru", "B 4", Time.fromBlock(4), Iteration.ALWAYS)
-  ]
-}
+    { time: BlOCK_1, subject: LF_6, place: room("B", 411), group: 1 },
+    { time: BlOCK_1, subject: IS, place: room("B", 312), group: 2 },
+    { time: BlOCK_2, subject: CH, place: room("B", 9) },
+    { time: BlOCK_3, subject: D, place: room("B", 6) },
+    { time: BlOCK_4, subject: FRZ, place: room("A", 102) },
+    { time: BlOCK_4, subject: RU, place: room("B", 4) },
+  ],
+};
