@@ -43,11 +43,11 @@ export interface Timetable {
   fri: Lesson[];
 }
 
-export const BlOCK_1: Time = { start: 0, duration: 2 };
-export const BlOCK_2: Time = { start: 2, duration: 2 };
-export const BlOCK_3: Time = { start: 4, duration: 2 };
-export const BlOCK_4: Time = { start: 6, duration: 2 };
-export const BlOCK_5: Time = { start: 8, duration: 2 };
+export const BlOCK_1: Time = { start: 1, duration: 2 };
+export const BlOCK_2: Time = { start: 3, duration: 2 };
+export const BlOCK_3: Time = { start: 5, duration: 2 };
+export const BlOCK_4: Time = { start: 7, duration: 2 };
+export const BlOCK_5: Time = { start: 9, duration: 2 };
 
 export const W_R: Subject = { name: "W/R" };
 export const EN: Subject = { name: "En" };
@@ -62,10 +62,10 @@ export const LIT: Subject = { name: "Lit" };
 export const SP: Subject = { name: "Sp" };
 export const GE: Subject = { name: "Ge" };
 export const ETH: Subject = { name: "Eth" };
-export const FRZ: Subject = { name: "FRZ", aliases: ["F-B"] };
-export const RU: Subject = { name: "RU" };
+export const FRZ: Subject = { name: "FRZ", aliases: ["Frz B", "F-B"] };
+export const RU: Subject = { name: "RU", aliases: ["Ru B", "R-B"] };
 export const D: Subject = { name: "D" };
-export const PH: Subject = { name: "Ph" };
+export const PH: Subject = { name: "Ph", aliases: ["PHY"] };
 export const CH: Subject = { name: "Ch" };
 
 export function room(building: Building, number: number | string): Room {
