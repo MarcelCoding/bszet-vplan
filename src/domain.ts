@@ -16,7 +16,7 @@ export interface Subject {
   aliases?: string[];
 }
 
-export type Building = "A" | "B" | "Kästner";
+export type Building = "A" | "B" | "D" | "Kästner";
 
 export interface Room {
   building: Building;
@@ -78,10 +78,19 @@ export const BlOCK_5: Time = { start: 9, duration: 2 };
 
 export const W_R: Subject = { name: "W/R" };
 export const EN: Subject = { name: "En" };
+export const EN_LK: Subject = { name: "En LK" };
+export const EN_GK: Subject = { name: "En GK" };
 export const MA: Subject = { name: "Ma" };
+export const MA_LK: Subject = { name: "Ma LK" };
+export const MA_GK: Subject = { name: "Ma GK" };
 export const LF_1_2: Subject = { name: "LF 1+2" };
 export const LF_5: Subject = { name: "LF 5" };
 export const LF_6: Subject = { name: "LF 6" };
+export const LF_6_7_9: Subject = { name: "LF 6+7+9" };
+export const LF_8: Subject = { name: "LF 8" };
+export const LF_10: Subject = { name: "LF 10" };
+export const LF_11: Subject = { name: "LF 11" };
+export const BK: Subject = { name: "BK" };
 export const BK_1: Subject = { name: "BK 1" };
 export const BK_2: Subject = { name: "BK 2" };
 export const IS: Subject = { name: "IS" };
@@ -98,10 +107,19 @@ export const CH: Subject = { name: "Ch" };
 const subjects = [
   W_R,
   EN,
+  EN_LK,
+  EN_GK,
   MA,
+  MA_LK,
+  MA_GK,
   LF_1_2,
   LF_5,
   LF_6,
+  LF_6_7_9,
+  LF_8,
+  LF_10,
+  LF_11,
+  BK,
   BK_1,
   BK_2,
   IS,

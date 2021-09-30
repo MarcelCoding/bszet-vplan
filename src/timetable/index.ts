@@ -2,6 +2,7 @@ import { Day, Timetable, TimetableChange } from "../domain";
 import { applyChanges } from "./changes";
 import { applyIteration, getIteration } from "../iteration";
 import { IGD21 } from "./igd21";
+import { IGD20 } from "./igd20";
 import { fetchChanges } from "../changes";
 
 export async function getActualTimetable(
@@ -41,6 +42,8 @@ function getTimetable(clazz: string): Timetable | null {
   switch (clazz.toUpperCase()) {
     case "IGD21":
       return IGD21;
+    case "IGD20":
+      return IGD20;
     default:
       return null;
   }
