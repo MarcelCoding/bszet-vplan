@@ -3,11 +3,12 @@ import { notifyDiscord } from "./discord";
 
 export async function notify(
   message: string,
-  image: string[] | null,
-  messageWithoutImage: string
+  image: string[] | undefined,
+  telegram: number[],
+  discord: string[]
 ) {
   return Promise.all([
-    notifyDiscord(messageWithoutImage),
-    notifyTelegram(message, image, messageWithoutImage),
+    notifyTelegram(telegram, message, image),
+    notifyDiscord(discord, message),
   ]);
 }

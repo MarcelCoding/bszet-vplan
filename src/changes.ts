@@ -10,7 +10,7 @@ const CHANGES_PDF_URL =
   "https://geschuetzt.bszet.de/s-lk-vw/Vertretungsplaene/vertretungsplan-bgy.pdf";
 const PARSE_CHANGES_URL = "https://pdf2img.schripke.xyz/parse-pdf";
 
-export async function checkChangesAndUpdate(): Promise<boolean> {
+export async function checkChangesAndUpdate(): Promise<Date | null> {
   const [actualLastModified, storedLastModified] = await Promise.all([
     fetchChangesPdfLastModified(),
     getStoredLastModified(),
@@ -21,10 +21,10 @@ export async function checkChangesAndUpdate(): Promise<boolean> {
       setStoredLastModified(actualLastModified),
       setStoredChanges(),
     ]);
-    return true;
+    return new Date(actualLastModified);
   }
 
-  return false;
+  return null;
 }
 
 export async function fetchChangesPdf(): Promise<Blob> {
