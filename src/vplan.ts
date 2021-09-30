@@ -5,7 +5,7 @@ import {
 } from "./changes";
 import { formatDateTime, formatRelativeTime, pdf2Img } from "./utils";
 import { getIteration } from "./iteration";
-import { Changes } from "./domain";
+import { Changes, Config } from "./domain";
 import { notify } from "./notification";
 import { getActualTimetable, getAsciiTimetable } from "./timetable";
 import Toucan from "toucan-js";
@@ -29,25 +29,37 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
   }
 
   let data;
-  let day;
 
   try {
     data = await fetchChanges(lastModified);
-    day = await getActualTimetable("IGD21", date, data.changes);
   } catch (e) {
     sentry.captureException(e);
     console.error(e);
   }
 
-  const passedTime = formatRelativeTime(lastModified.getTime() - Date.now());
+  // @ts-ignore
+  const config: Config = JSON.parse(CONFIG);
 
-  const iteration = getIteration();
-  const message = day
-    ? `Der Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben.\n\`\`\`\n${getAsciiTimetable(
-        day.timetable
-      )}\n\`\`\``
-    : `Die PDF Api konnte nicht erreicht werden.\n\nDer Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben. Hier die Änderungen ansehen ${CHANGES_PDF_URL}. Der aktuelle Turnus ist ${iteration}.`;
-  return notify(message, data?.images);
+  return Promise.all([
+    processClass(
+      sentry,
+      date,
+      lastModified,
+      data,
+      "IGD21",
+      config.IGD21.telegram,
+      config.IGD21.discord
+    ),
+    processClass(
+      sentry,
+      date,
+      lastModified,
+      data,
+      "IGD20",
+      config.IGD20.telegram,
+      config.IGD20.discord
+    ),
+  ]);
 }
 
 async function fetchChanges(
@@ -70,4 +82,33 @@ async function fetchChanges(
   ]);
 
   return { changes, images };
+}
+
+async function processClass(
+  sentry: Toucan,
+  date: Date,
+  lastModified: Date,
+  data: { changes: Changes; images: string[] } | undefined,
+  clazz: string,
+  telegram: number[],
+  discord: string[]
+): Promise<unknown> {
+  let day;
+
+  try {
+    if (data) day = await getActualTimetable(clazz, date, data.changes);
+  } catch (e) {
+    sentry.captureException(e);
+    console.error(e);
+  }
+
+  const passedTime = formatRelativeTime(lastModified.getTime() - Date.now());
+
+  const iteration = getIteration();
+  const message = day
+    ? `Der Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben.\n\`\`\`\n${getAsciiTimetable(
+        day.timetable
+      )}\n\`\`\``
+    : `Die PDF Api konnte nicht erreicht werden.\n\nDer Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben. Hier die Änderungen ansehen ${CHANGES_PDF_URL}. Der aktuelle Turnus ist ${iteration}.`;
+  return notify(message, data?.images, telegram, discord);
 }

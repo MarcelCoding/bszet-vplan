@@ -3,4 +3,5 @@ dist
 worker
 .idea
 *.iml
-hook.txt
+hook.json
+hook.dev.json

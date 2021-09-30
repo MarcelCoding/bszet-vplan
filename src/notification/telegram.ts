@@ -1,18 +1,17 @@
 // @ts-ignore
-const CHAT_IDS: number[] = JSON.parse(TELEGRAM_CHAT_IDS);
-// @ts-ignore
 const API_BASE_URL = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
 const IMAGE_BASE_URL =
   "https://bszet-vplan-staging.marcelcoding.workers.dev/image";
 
 export async function notifyTelegram(
+  chatIds: number[],
   message: string,
   images: string[] | undefined
 ): Promise<unknown> {
   return Promise.all(
     images?.length
-      ? CHAT_IDS.map((chatId) => sendImages(chatId, message, images))
-      : CHAT_IDS.map((chatId) => sendMessage(chatId, message))
+      ? chatIds.map((chatId) => sendImages(chatId, message, images))
+      : chatIds.map((chatId) => sendMessage(chatId, message))
   );
 }
 

@@ -70,6 +70,17 @@ export interface Changes {
   failures: unknown[];
 }
 
+export interface Config {
+  IGD21: {
+    telegram: number[];
+    discord: string[];
+  };
+  IGD20: {
+    telegram: number[];
+    discord: string[];
+  };
+}
+
 export const BlOCK_1: Time = { start: 1, duration: 2 };
 export const BlOCK_2: Time = { start: 3, duration: 2 };
 export const BlOCK_3: Time = { start: 5, duration: 2 };
