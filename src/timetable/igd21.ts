@@ -24,9 +24,9 @@ import {
   SP,
   Timetable,
   W_R,
-} from "./domain";
+} from "../domain";
 
-export const TIMETABLE: Timetable = {
+export const IGD21: Timetable = {
   mon: [
     { time: BlOCK_2, subject: W_R, place: room("B", 8) },
     { time: BlOCK_3, iteration: 1, subject: EN, place: room("B", 12) },

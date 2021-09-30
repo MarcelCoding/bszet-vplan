@@ -31,16 +31,37 @@ export interface Lesson {
   time: Time;
   iteration?: Iteration;
   subject: Subject;
-  place: Place;
+  place: Place /* vplan changes -> */ | string;
   group?: Group;
+  cancel?: boolean;
 }
 
 export interface Timetable {
-  mon: Lesson[];
-  tue: Lesson[];
-  wed: Lesson[];
-  thu: Lesson[];
-  fri: Lesson[];
+  mon: Day;
+  tue: Day;
+  wed: Day;
+  thu: Day;
+  fri: Day;
+}
+
+export type Day = Lesson[];
+
+export interface Change<T> {
+  from: T;
+  to: T;
+}
+
+export type Action = "cancellation" | "replacement" | "room-change";
+
+export interface TimetableChange {
+  classes: string[];
+  subject: Change<string>;
+  room: Change<string>;
+  date: string;
+  lesson: number;
+  message: string;
+  action: Action;
+  guessedAction: boolean;
 }
 
 export const BlOCK_1: Time = { start: 1, duration: 2 };
@@ -62,12 +83,48 @@ export const LIT: Subject = { name: "Lit" };
 export const SP: Subject = { name: "Sp" };
 export const GE: Subject = { name: "Ge" };
 export const ETH: Subject = { name: "Eth" };
-export const FRZ: Subject = { name: "FRZ", aliases: ["Frz B", "F-B"] };
-export const RU: Subject = { name: "RU", aliases: ["Ru B", "R-B"] };
-export const D: Subject = { name: "D" };
-export const PH: Subject = { name: "Ph", aliases: ["PHY"] };
+export const FRZ: Subject = { name: "FRZ", aliases: ["frz b", "f-b"] };
+export const RU: Subject = { name: "RU", aliases: ["ru b", "r-b"] };
+export const D: Subject = { name: "D", aliases: ["de", "deu"] };
+export const PH: Subject = { name: "Ph", aliases: ["phy"] };
 export const CH: Subject = { name: "Ch" };
+
+const subjects = [
+  W_R,
+  EN,
+  MA,
+  LF_1_2,
+  LF_5,
+  LF_6,
+  BK_1,
+  BK_2,
+  IS,
+  LIT,
+  SP,
+  GE,
+  ETH,
+  FRZ,
+  RU,
+  D,
+  PH,
+  CH,
+];
 
 export function room(building: Building, number: number | string): Room {
   return { building, number };
+}
+
+export function getSubject(value: string): Subject {
+  const query = value.toLowerCase();
+
+  const subject = subjects.find(
+    (subject) =>
+      subject.name.toLowerCase() === query || subject.aliases?.includes(query)
+  );
+
+  if (!subject) {
+    throw new Error(`Unable to find subject "${query}".`);
+  }
+
+  return subject;
 }
