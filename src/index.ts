@@ -1,12 +1,12 @@
-import { vPlanCron } from "./vplan";
 import { Router } from "itty-router";
 import { initSentry } from "./sentry";
-import { fetchChanges } from "./timetable/changes";
 import { getActualTimetable } from "./timetable";
+import { checkChangesAndUpdate, fetchChanges } from "./changes";
 
 async function handleCron(): Promise<unknown> {
   // if more, use Promise.all
-  return vPlanCron();
+  // return vPlanCron();
+  return checkChangesAndUpdate();
 }
 
 const router = Router()
@@ -16,12 +16,12 @@ const router = Router()
       headers: { Authorization: `Bearer ${API_KEY}` },
     })
   )
-  .get("/test/changes", async () => {
+  .get("/timetable/changes", async () => {
     return new Response(JSON.stringify(await fetchChanges()), {
       headers: { "Content-Type": "application/json" },
     });
   })
-  .get("/test/:clazz", async (request) => {
+  .get("/timetable/:clazz", async (request) => {
     let date;
 
     const rawDate = request.query?.date;

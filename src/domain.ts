@@ -34,6 +34,7 @@ export interface Lesson {
   place: Place /* vplan changes -> */ | string;
   group?: Group;
   cancel?: boolean;
+  note?: string;
 }
 
 export interface Timetable {
@@ -62,6 +63,11 @@ export interface TimetableChange {
   message: string;
   action: Action;
   guessedAction: boolean;
+}
+
+export interface Changes {
+  data: TimetableChange[];
+  failures: unknown[];
 }
 
 export const BlOCK_1: Time = { start: 1, duration: 2 };

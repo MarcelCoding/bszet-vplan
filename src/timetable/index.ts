@@ -1,7 +1,8 @@
 import { Day, Timetable, TimetableChange } from "../domain";
-import { applyChanges, fetchChanges } from "./changes";
+import { applyChanges } from "./changes";
 import { applyIteration, getIteration } from "../iteration";
 import { IGD21 } from "./igd21";
+import { fetchChanges } from "../changes";
 
 export async function getActualTimetable(
   clazz: string,
@@ -9,12 +10,12 @@ export async function getActualTimetable(
 ): Promise<{ timetable: Day; changes: TimetableChange[] }> {
   const isoDate = date.toISOString().substring(0, 10);
 
-  const orgTimetable = getTimetable(clazz);
-  if (!orgTimetable) {
-    throw new Error(`Class "${clazz}" not found`);
+  const fullTimetable = getTimetable(clazz);
+  if (!fullTimetable) {
+    throw new Error(`Class "${clazz}" not found.`);
   }
 
-  const timetable = getDay(orgTimetable, date);
+  const timetable = getDay(fullTimetable, date);
 
   const changesResponse = await fetchChanges();
   const changes = changesResponse.data.filter(
@@ -37,7 +38,7 @@ export async function getActualTimetable(
 }
 
 function getTimetable(clazz: string): Timetable | null {
-  switch (clazz) {
+  switch (clazz.toUpperCase()) {
     case "IGD21":
       return IGD21;
     default:

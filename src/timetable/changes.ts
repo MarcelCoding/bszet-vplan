@@ -1,9 +1,5 @@
 import { Day, getSubject, Lesson, TimetableChange } from "../domain";
 
-const CHANGES_URL =
-  "https://geschuetzt.bszet.de/s-lk-vw/Vertretungsplaene/vertretungsplan-bgy.pdf";
-const PARSE_CHANGES_URL = "https://pdf2img.schripke.xyz/parse-pdf";
-
 export function applyChanges(timetable: Day, changes: TimetableChange[]): void {
   changes.forEach((change) => applyChange(timetable, change));
 }
@@ -41,44 +37,18 @@ function applyChange0(lesson: Lesson, change: TimetableChange) {
       break;
     case "replacement":
       lesson.subject = getSubject(change.subject.to);
-      lesson.place = change.subject.to;
+      lesson.place = change.room.to;
       break;
     case "room-change":
-      lesson.place = change.subject.to;
+      lesson.place = change.room.to;
       break;
-  }
-}
-
-export async function fetchChanges(): Promise<{
-  data: TimetableChange[];
-  failures: unknown[];
-}> {
-  const bszResponse = await fetch(CHANGES_URL, {
-    // @ts-ignore
-    headers: { Authorization: "Basic " + btoa(USER + ":" + PASS) },
-  });
-
-  if (bszResponse.status !== 200) {
-    throw new Error(
-      `Unable to fetch vplan: ${bszResponse.status} ${bszResponse.statusText}`
-    );
+    default:
+      throw new Error(
+        `Timetable change action "${change.action}" not implemented.`
+      );
   }
 
-  const data = new FormData();
-  data.append("file", new Blob([await bszResponse.arrayBuffer()]));
-
-  const changesResponse = await fetch(PARSE_CHANGES_URL, {
-    method: "POST",
-    body: data,
-    // @ts-ignore
-    headers: { Authorization: `Bearer ${API_KEY}` },
-  });
-
-  if (changesResponse.status !== 200) {
-    throw new Error(
-      `Unable to parse changes: ${bszResponse.status} ${bszResponse.statusText}`
-    );
+  if (change.message !== "Ausfall") {
+    lesson.note = change.message;
   }
-
-  return changesResponse.json();
 }
