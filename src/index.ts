@@ -1,12 +1,13 @@
 import { Router } from "itty-router";
 import { initSentry } from "./sentry";
 import { getActualTimetable } from "./timetable";
-import { checkChangesAndUpdate, fetchChanges } from "./changes";
+import { fetchChanges } from "./changes";
+import { vPlanCron } from "./vplan";
+import Toucan from "toucan-js";
 
-async function handleCron(): Promise<unknown> {
+async function handleCron(sentry: Toucan): Promise<unknown> {
   // if more, use Promise.all
-  // return vPlanCron();
-  return checkChangesAndUpdate();
+  return vPlanCron(sentry);
 }
 
 const router = Router()
@@ -42,9 +43,26 @@ const router = Router()
       return new Response("Missing Class: /test/<class>", { status: 404 });
     }
 
-    return new Response(JSON.stringify(await getActualTimetable(clazz, date)), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify(
+        await getActualTimetable(clazz, date, await fetchChanges())
+      ),
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  })
+  .get("/cron", async () => {
+    return new Response(
+      JSON.stringify(
+        // @ts-ignore
+        await handleCron({
+          captureException: (e) => {
+            throw e;
+          },
+        })
+      )
+    );
   })
   .all("*", () => new Response("Not Found", { status: 404 }));
 
@@ -53,7 +71,11 @@ addEventListener("fetch", (event) => {
   event.respondWith(
     router.handle(event.request).catch((error: unknown) => {
       sentry.captureException(error);
-      throw error;
+      // throw error;
+      // @ts-ignore
+      return new Response(`Internal Server Error: ${error.message}`, {
+        status: 500,
+      });
     })
   );
 });
@@ -62,7 +84,7 @@ addEventListener("scheduled", (event) => {
   const sentry = initSentry(event);
 
   event.waitUntil(
-    handleCron().catch((error: unknown) => {
+    handleCron(sentry).catch((error: unknown) => {
       sentry.captureException(error);
       throw error;
     })

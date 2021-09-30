@@ -1,13 +1,47 @@
-import { Day, Timetable, TimetableChange } from "../domain";
+import { Changes, Day, Lesson, Timetable, TimetableChange } from "../domain";
 import { applyChanges } from "./changes";
 import { applyIteration, getIteration } from "../iteration";
 import { IGD21 } from "./igd21";
 import { IGD20 } from "./igd20";
-import { fetchChanges } from "../changes";
+import { table } from "table";
+
+export function getAsciiTimetable(timetable: Day): string {
+  const hasNote = Boolean(timetable.find((x) => x.note));
+
+  return table(timetable.map((lesson) => formatLesson(lesson, hasNote)));
+}
+
+function formatLesson(lesson: Lesson, note: boolean): unknown[] {
+  const room =
+    typeof lesson.place === "object"
+      ? `${lesson.place.building} ${lesson.place.number}`
+      : lesson.place;
+
+  const data = [
+    lesson.time.start + ".",
+    lesson.cancel
+      ? `Ausfall (${formatSubject(lesson)})`
+      : formatSubject(lesson),
+    room,
+  ];
+
+  if (note) {
+    data.push(lesson.note || "");
+  }
+
+  return data;
+}
+
+function formatSubject(lesson: Lesson): string {
+  return lesson.group
+    ? lesson.subject.name + ", Gr. " + lesson.group
+    : lesson.subject.name;
+}
 
 export async function getActualTimetable(
   clazz: string,
-  date: Date
+  date: Date,
+  changesResponse: Changes
 ): Promise<{ timetable: Day; changes: TimetableChange[] }> {
   const isoDate = date.toISOString().substring(0, 10);
 
@@ -18,7 +52,6 @@ export async function getActualTimetable(
 
   const timetable = getDay(fullTimetable, date);
 
-  const changesResponse = await fetchChanges();
   const changes = changesResponse.data.filter(
     (change) => change.classes.includes(clazz) && change.date === isoDate
   );

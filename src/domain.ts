@@ -70,6 +70,17 @@ export interface Changes {
   failures: unknown[];
 }
 
+export interface Config {
+  IGD21: {
+    telegram: number[];
+    discord: string[];
+  };
+  IGD20: {
+    telegram: number[];
+    discord: string[];
+  };
+}
+
 export const BlOCK_1: Time = { start: 1, duration: 2 };
 export const BlOCK_2: Time = { start: 3, duration: 2 };
 export const BlOCK_3: Time = { start: 5, duration: 2 };
@@ -78,11 +89,11 @@ export const BlOCK_5: Time = { start: 9, duration: 2 };
 
 export const W_R: Subject = { name: "W/R" };
 export const EN: Subject = { name: "En" };
-export const EN_LK: Subject = { name: "En LK" };
-export const EN_GK: Subject = { name: "En GK" };
+export const EN_LK: Subject = { name: "En LK", aliases: ["lk-en"] };
+export const EN_GK: Subject = { name: "En GK", aliases: ["gk-en"] };
 export const MA: Subject = { name: "Ma" };
-export const MA_LK: Subject = { name: "Ma LK" };
-export const MA_GK: Subject = { name: "Ma GK" };
+export const MA_LK: Subject = { name: "Ma LK", aliases: ["lk-ma"] };
+export const MA_GK: Subject = { name: "Ma GK", aliases: ["gk-ma"] };
 export const LF_1_2: Subject = { name: "LF 1+2" };
 export const LF_5: Subject = { name: "LF 5" };
 export const LF_6: Subject = { name: "LF 6" };
