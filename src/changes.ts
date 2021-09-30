@@ -10,29 +10,6 @@ const CHANGES_PDF_URL =
   "https://geschuetzt.bszet.de/s-lk-vw/Vertretungsplaene/vertretungsplan-bgy.pdf";
 const PARSE_CHANGES_URL = "https://pdf2img.schripke.xyz/parse-pdf";
 
-// async function fetchChanges(): ChangesResponse {
-//   const changesPdf = await fetchChangesPdf();
-//   const actualLastModifiedDate = new Date(actualLastModified);
-//
-//   const passedMs = actualLastModifiedDate.getTime() - Date.now();
-//   const passedTime = formatRelativeTime(passedMs);
-//   const iteration = getIteration();
-//
-//   const [changes, images] = await Promise.all([
-//     parseChanges(changesPdf),
-//     pdf2Img(
-//         changesPdf,
-//         formatDateTime(actualLastModifiedDate),
-//         `${passedTime} aktualisiert`,
-//         `Turnus ${iteration}`
-//     ),
-//   ]);
-//
-//   await setStoredLastModified(actualLastModified);
-//
-//   return { changes, images };
-// }
-
 export async function checkChangesAndUpdate(): Promise<boolean> {
   const [actualLastModified, storedLastModified] = await Promise.all([
     fetchChangesPdfLastModified(),
@@ -72,14 +49,10 @@ export async function fetchChanges(): Promise<Changes> {
   }
 
   const changesPdf = await fetchChangesPdf();
-  const changes = await parseChanges(changesPdf);
-
-  await setStoredChanges(changes);
-
-  return changes;
+  return await parseAndStoreChanges(changesPdf);
 }
 
-async function parseChanges(changesPdf: Blob): Promise<Changes> {
+export async function parseAndStoreChanges(changesPdf: Blob): Promise<Changes> {
   const body = new FormData();
   body.append("file", changesPdf);
 
@@ -96,7 +69,10 @@ async function parseChanges(changesPdf: Blob): Promise<Changes> {
     );
   }
 
-  return response.json();
+  const changes = await response.json();
+  await setStoredChanges(changes);
+
+  return changes;
 }
 
 async function fetchChangesPdfLastModified(): Promise<string> {

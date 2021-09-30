@@ -48,7 +48,7 @@ function applyChange0(lesson: Lesson, change: TimetableChange) {
       );
   }
 
-  if (change.message !== "Ausfall") {
+  if (change.message.length && change.message !== "Ausfall") {
     lesson.note = change.message;
   }
 }
