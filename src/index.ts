@@ -18,12 +18,24 @@ const router = Router()
       headers: { Authorization: `Bearer ${API_KEY}` },
     })
   )
-  .get("/timetable/changes", async () => {
+  .get("/timetable/changes", async (request) => {
+    const key = request.query?.key;
+    // @ts-ignore
+    if (!key || key !== OWN_API_KEY) {
+      return new Response("Bad Api Key", { status: 403 });
+    }
+
     return new Response(JSON.stringify(await fetchChanges()), {
       headers: { "Content-Type": "application/json" },
     });
   })
   .get("/timetable/:clazz", async (request) => {
+    const key = request.query?.key;
+    // @ts-ignore
+    if (!key || key !== OWN_API_KEY) {
+      return new Response("Bad Api Key", { status: 403 });
+    }
+
     let date;
 
     const rawDate = request.query?.date;
@@ -50,18 +62,6 @@ const router = Router()
       {
         headers: { "Content-Type": "application/json" },
       }
-    );
-  })
-  .get("/cron", async () => {
-    return new Response(
-      JSON.stringify(
-        // @ts-ignore
-        await handleCron({
-          captureException: (e) => {
-            throw e;
-          },
-        })
-      )
     );
   })
   .all("*", () => new Response("Not Found", { status: 404 }));
