@@ -24,8 +24,13 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
     return;
   }
 
-  if (date.getUTCHours() >= 15) {
+  if (15 <= date.getUTCHours()) {
     date.setUTCDate(date.getUTCDate() + 1);
+  }
+
+  if (date.getUTCDay() === 6 || date.getUTCDay() === 0) {
+    // skip to next monday (day: 1)
+    date.setUTCDate(date.getUTCDate() + (8 - date.getUTCDay()));
   }
 
   let data;

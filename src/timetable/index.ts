@@ -84,7 +84,7 @@ function getTimetable(clazz: string): Timetable | null {
 
 function getDay(timetable: Timetable, date: Date): Day {
   // 0 = sunday
-  const day = date.getDay();
+  const day = date.getUTCDay();
 
   switch (day) {
     case 1:
