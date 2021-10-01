@@ -11,6 +11,12 @@ const dateTimeFormat = new Intl.DateTimeFormat(locale, {
   timeZone: "Europe/Berlin",
 });
 
+const longDateTimeFormat = new Intl.DateTimeFormat(locale, {
+  timeStyle: "short",
+  dateStyle: "full",
+  timeZone: "Europe/Berlin",
+});
+
 export function formatRelativeTime(diff: number): string {
   const secDiff = diff / 1000;
 
@@ -39,6 +45,9 @@ function isInRange(start: number, value: number, end: number) {
 
 export function formatDateTime(date: Date) {
   return dateTimeFormat.format(date);
+}
+export function formatLongDateTime(date: Date) {
+  return longDateTimeFormat.format(date);
 }
 
 export async function pdf2Img(

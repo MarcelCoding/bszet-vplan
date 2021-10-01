@@ -3,7 +3,12 @@ import {
   fetchChangesPdf,
   parseAndStoreChanges,
 } from "./changes";
-import { formatDateTime, formatRelativeTime, pdf2Img } from "./utils";
+import {
+  formatDateTime,
+  formatLongDateTime,
+  formatRelativeTime,
+  pdf2Img,
+} from "./utils";
 import { getIteration } from "./iteration";
 import { Changes, Config } from "./domain";
 import { notify } from "./notification";
@@ -111,7 +116,9 @@ async function processClass(
 
   const iteration = getIteration();
   const message = day
-    ? `Der Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben.\n\`\`\`\n${getAsciiTimetable(
+    ? `Der Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben.\n\nVertretungsplan für ${formatLongDateTime(
+        date
+      )}. Der aktuelle Turnus ist ${iteration}.\`\`\`\n${getAsciiTimetable(
         day.timetable
       )}\n\`\`\``
     : `Die PDF Api konnte nicht erreicht werden.\n\nDer Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben. Hier die Änderungen ansehen ${CHANGES_PDF_URL}. Der aktuelle Turnus ist ${iteration}.`;
