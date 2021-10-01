@@ -3,12 +3,17 @@ import { applyChanges } from "./changes";
 import { applyIteration, getIteration } from "../iteration";
 import { IGD21 } from "./igd21";
 import { IGD20 } from "./igd20";
-import { table } from "table";
+import { getBorderCharacters, table } from "table";
+
+const tableBorderCharacters = getBorderCharacters("void");
 
 export function getAsciiTimetable(timetable: Day): string {
   const hasNote = Boolean(timetable.find((x) => x.note));
 
-  return table(timetable.map((lesson) => formatLesson(lesson, hasNote)));
+  return table(
+    timetable.map((lesson) => formatLesson(lesson, hasNote)),
+    { border: tableBorderCharacters }
+  );
 }
 
 function formatLesson(lesson: Lesson, note: boolean): unknown[] {
