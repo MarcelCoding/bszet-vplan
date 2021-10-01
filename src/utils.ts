@@ -56,7 +56,8 @@ export async function pdf2Img(
   params.append("bottom-text", line3);
 
   const response = await fetch(
-    `https://pdf2img.schripke.xyz/pdf2img?${params.toString()}`,
+    // @ts-ignore
+    `${API_URL}/pdf2img?${params.toString()}`,
     {
       method: "POST",
       body: data,

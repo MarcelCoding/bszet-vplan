@@ -8,7 +8,8 @@ import {
 
 const CHANGES_PDF_URL =
   "https://geschuetzt.bszet.de/s-lk-vw/Vertretungsplaene/vertretungsplan-bgy.pdf";
-const PARSE_CHANGES_URL = "https://pdf2img.schripke.xyz/parse-pdf";
+// @ts-ignore
+const PARSE_CHANGES_URL = `${API_URL}/parse-pdf`;
 
 export async function checkChangesAndUpdate(): Promise<Date | null> {
   const [actualLastModified, storedLastModified] = await Promise.all([
