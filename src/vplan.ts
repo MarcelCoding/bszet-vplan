@@ -118,7 +118,7 @@ async function processClass(
   const message = day
     ? `Der Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben.\n\nVertretungsplan für ${formatLongDateTime(
         date
-      )}. Der aktuelle Turnus ist ${iteration}.\`\`\`\n${getAsciiTimetable(
+      )}. Der aktuelle Turnus ist ${iteration}.\n\n\`\`\`\n${getAsciiTimetable(
         day.timetable
       )}\n\`\`\``
     : `Die PDF Api konnte nicht erreicht werden.\n\nDer Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben. Hier die Änderungen ansehen ${CHANGES_PDF_URL}. Der aktuelle Turnus ist ${iteration}.`;
