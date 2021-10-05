@@ -37,7 +37,7 @@ export const IGD21: Timetable = {
   ],
   tue: [
     { time: BlOCK_1, subject: MA, place: "B 12" },
-    { time: BlOCK_2, subject: EN, place: "B 204" },
+    { time: BlOCK_2, subject: EN, place: "B 110" },
     { time: BlOCK_3, subject: LF_1_2, place: "B 03" },
     { time: BlOCK_4, iteration: 1, subject: BK_2, place: "A 06" },
     { time: BlOCK_4, iteration: 2, subject: SP, place: "Kästner" },
