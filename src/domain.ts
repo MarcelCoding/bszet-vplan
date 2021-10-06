@@ -87,7 +87,7 @@ export const BlOCK_3: Time = { start: 5, duration: 2 };
 export const BlOCK_4: Time = { start: 7, duration: 2 };
 export const BlOCK_5: Time = { start: 9, duration: 2 };
 
-export const W_R: Subject = { name: "W/R" };
+export const W_R: Subject = { name: "W/R", aliases: ["wlr"] };
 export const EN: Subject = { name: "En", aliases: ["eng"] };
 export const EN_LK: Subject = { name: "En LK", aliases: ["lk-en"] };
 export const EN_GK: Subject = { name: "En GK", aliases: ["gk-en"] };
