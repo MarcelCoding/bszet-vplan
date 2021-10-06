@@ -10,9 +10,16 @@ const tableBorderCharacters = getBorderCharacters("void");
 export function getAsciiTimetable(timetable: Day): string {
   const hasNote = Boolean(timetable.find((x) => x.note));
 
-  return table(
-    timetable.map((lesson) => formatLesson(lesson, hasNote)),
-    { border: tableBorderCharacters }
+  return (
+    table(
+      timetable.map((lesson) => formatLesson(lesson, hasNote)),
+      { border: tableBorderCharacters }
+    )
+      // workaround to remove space on front and behind table (issue #17)
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length !== 0)
+      .join("\n")
   );
 }
 
