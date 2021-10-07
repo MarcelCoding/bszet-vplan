@@ -11,7 +11,10 @@ const CHANGES_PDF_URL =
 // @ts-ignore
 const PARSE_CHANGES_URL = `${API_URL}/parse-pdf`;
 
-export async function checkChangesAndUpdate(): Promise<Date | null> {
+export async function checkChangesAndUpdate(): Promise<{
+  lastModified: Date;
+  modified: boolean;
+}> {
   const [actualLastModified, storedLastModified] = await Promise.all([
     fetchChangesPdfLastModified(),
     getStoredLastModified(),
@@ -22,10 +25,10 @@ export async function checkChangesAndUpdate(): Promise<Date | null> {
       setStoredLastModified(actualLastModified),
       setStoredChanges(),
     ]);
-    return new Date(actualLastModified);
+    return { lastModified: new Date(actualLastModified), modified: true };
   }
 
-  return null;
+  return { lastModified: new Date(actualLastModified), modified: false };
 }
 
 export async function fetchChangesPdf(): Promise<Blob> {

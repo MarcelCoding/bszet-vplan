@@ -21,8 +21,10 @@ const CHANGES_PDF_URL =
 export async function vPlanCron(sentry: Toucan): Promise<unknown> {
   const date = new Date();
 
-  const lastModified = await checkChangesAndUpdate();
-  if (!(lastModified || (date.getUTCHours() === 15 && date.getUTCMinutes() <= 14))) {
+  const { lastModified, modified } = await checkChangesAndUpdate();
+  if (
+    !(modified || (date.getUTCHours() === 15 && date.getUTCMinutes() <= 14))
+  ) {
     return;
   }
 
