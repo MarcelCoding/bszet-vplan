@@ -52,7 +52,7 @@ export interface Change<T> {
   to: T;
 }
 
-export type Action = "cancellation" | "replacement" | "room-change";
+export type Action = "cancellation" | "replacement" | "room-change" | "add";
 
 export interface TimetableChange {
   classes: string[];
@@ -86,6 +86,23 @@ export const BlOCK_2: Time = { start: 3, duration: 2 };
 export const BlOCK_3: Time = { start: 5, duration: 2 };
 export const BlOCK_4: Time = { start: 7, duration: 2 };
 export const BlOCK_5: Time = { start: 9, duration: 2 };
+
+export function getBlock(start: number) {
+  switch (start) {
+    case 1:
+      return BlOCK_1;
+    case 3:
+      return BlOCK_2;
+    case 5:
+      return BlOCK_3;
+    case 7:
+      return BlOCK_4;
+    case 9:
+      return BlOCK_5;
+    default:
+      throw new Error(`Block with start time ${start} is not defined.`);
+  }
+}
 
 export const W_R: Subject = { name: "W/R", aliases: ["wlr"] };
 export const EN: Subject = { name: "En", aliases: ["eng"] };
