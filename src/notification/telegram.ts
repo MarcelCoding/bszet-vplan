@@ -1,7 +1,5 @@
 // @ts-ignore
 const API_BASE_URL = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
-const IMAGE_BASE_URL =
-  "https://bszet-vplan-staging.marcelcoding.workers.dev/image";
 
 export async function notifyTelegram(
   chatIds: number[],
@@ -33,13 +31,15 @@ async function sendImages(
 
   if (images.length === 1) {
     url = "sendPhoto";
-    body = { photo: `${IMAGE_BASE_URL}/${images[0]}` };
+    // @ts-ignore
+    body = { photo: `${IMAGE_BASE_URL}/image/${images[0]}` };
   } else {
     url = "sendMediaGroup";
     body = {
       media: images.map((image) => ({
         type: "photo",
-        media: `${IMAGE_BASE_URL}/${image}`,
+        // @ts-ignore
+        media: `${IMAGE_BASE_URL}/image/${image}`,
       })),
     };
     body.media![0].caption = message;
