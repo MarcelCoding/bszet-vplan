@@ -23,8 +23,8 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
 
   const lastModified = await checkChangesAndUpdate();
   if (
-    (date.getUTCHours() === 15 && date.getUTCMinutes() < 14) ||
-    !lastModified
+    !((date.getUTCHours() === 15 && date.getUTCMinutes() < 14) ||
+    lastModified)
   ) {
     return;
   }
