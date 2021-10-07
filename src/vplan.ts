@@ -22,11 +22,7 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
   const date = new Date();
 
   const lastModified = await checkChangesAndUpdate();
-  if (
-    date.getUTCHours() !== 15
-    || date.getUTCMinutes() >= 15
-    || lastModified
-  ) {
+  if (!(lastModified || (date.getUTCHours() === 15 && date.getUTCMinutes() <= 14))) {
     return;
   }
 
