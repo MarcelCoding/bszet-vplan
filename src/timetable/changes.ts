@@ -85,6 +85,9 @@ function handleChange(timetable: Day, change: TimetableChange): boolean {
     );
   }
 
+  // botch: set lesson cancel to false for api
+  lesson.cancel = false;
+
   switch (change.action) {
     case "replacement":
       lesson.subject = getSubject(change.subject.to);
