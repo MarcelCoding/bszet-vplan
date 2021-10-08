@@ -27,6 +27,8 @@ function applyChange(timetable: Day, change: TimetableChange) {
     );
   }
 
+  // botch: set lesson cancel to false for api
+  lesson.cancel = false;
   applyChange0(lesson, change);
 }
 
