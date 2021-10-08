@@ -15,7 +15,7 @@ export function applyChanges(timetable: Day, changes: TimetableChange[]): void {
     handleCancel(timetable, change);
   });
 
-  // If the add change is applied and a new lesson was added
+  // If the "add change" action is applied and a new lesson was added
   // the timetable has to be sorted, because the add change
   // adds the subjects at the end.
   let sort = false;

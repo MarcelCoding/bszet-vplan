@@ -81,24 +81,24 @@ export interface Config {
   };
 }
 
-export const BlOCK_1: Time = { start: 1, duration: 2 };
-export const BlOCK_2: Time = { start: 3, duration: 2 };
-export const BlOCK_3: Time = { start: 5, duration: 2 };
-export const BlOCK_4: Time = { start: 7, duration: 2 };
-export const BlOCK_5: Time = { start: 9, duration: 2 };
+export const BLOCK_1: Time = { start: 1, duration: 2 };
+export const BLOCK_2: Time = { start: 3, duration: 2 };
+export const BLOCK_3: Time = { start: 5, duration: 2 };
+export const BLOCK_4: Time = { start: 7, duration: 2 };
+export const BLOCK_5: Time = { start: 9, duration: 2 };
 
 export function getBlock(start: number) {
   switch (start) {
     case 1:
-      return BlOCK_1;
+      return BLOCK_1;
     case 3:
-      return BlOCK_2;
+      return BLOCK_2;
     case 5:
-      return BlOCK_3;
+      return BLOCK_3;
     case 7:
-      return BlOCK_4;
+      return BLOCK_4;
     case 9:
-      return BlOCK_5;
+      return BLOCK_5;
     default:
       throw new Error(`Block with start time ${start} is not defined.`);
   }
@@ -161,10 +161,6 @@ const subjects = [
   PH,
   CH,
 ];
-
-export function room(building: Building, number: number | string): Room {
-  return { building, number };
-}
 
 export function getSubject(value: string): Subject {
   const query = value.toLowerCase();
