@@ -57,7 +57,7 @@ const router = Router()
 
     return new Response(
       JSON.stringify(
-        await getActualTimetable(clazz, date, await fetchChanges())
+        await getActualTimetable(clazz, date, await fetchChanges()), (k, v) => v === undefined ? null : v,
       ),
       {
         headers: { "Content-Type": "application/json" },

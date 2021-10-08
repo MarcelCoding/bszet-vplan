@@ -32,6 +32,13 @@ export function applyChanges(timetable: Day, changes: TimetableChange[]): void {
   if (sort) {
     timetable.sort((a, b) => b.time.start - a.time.start);
   }
+
+  // botch: set lesson cancel to false for api
+  timetable.forEach((lesson) => {
+    if (!lesson.cancel) {
+      lesson.cancel = false;
+    }
+  });
 }
 
 function handleCancel(timetable: Day, change: TimetableChange): void {
