@@ -50,8 +50,6 @@ export function getIteration(date?: Date): Iteration | null {
     (date?.getTime() ?? Date.now()) / 1000 / 60 / 60 / 24
   );
 
-  console.log(date, time);
-
   for (let i = time - 6; i <= time; i++) {
     if (DATA[i]) {
       return DATA[i];
