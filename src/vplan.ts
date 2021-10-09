@@ -10,7 +10,7 @@ import {
   pdf2Img,
 } from "./utils";
 import { getIteration } from "./iteration";
-import { Changes, Config } from "./domain";
+import { Changes, Config, Iteration } from "./domain";
 import { notify } from "./notification";
 import { getActualTimetable, getAsciiTimetable } from "./timetable";
 import Toucan from "toucan-js";
@@ -32,15 +32,25 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
     date.setUTCDate(date.getUTCDate() + 1);
   }
 
-  if (date.getUTCDay() === 6 || date.getUTCDay() === 0) {
+  if (date.getUTCDay() === 6) {
     // skip to next monday (day: 1)
-    date.setUTCDate(date.getUTCDate() + (8 - date.getUTCDay()));
+    date.setUTCDate(date.getUTCDate() + 2);
+  }
+
+  if (date.getUTCDay() === 0) {
+    // skip to next monday (day: 1)
+    date.setUTCDate(date.getUTCDate() + 1);
+  }
+
+  const iteration = getIteration(date);
+  if (!iteration) {
+    throw new Error("Unable to gather iteration.");
   }
 
   let data;
 
   try {
-    data = await fetchChanges(lastModified);
+    data = await fetchChanges(lastModified, iteration);
   } catch (e) {
     sentry.captureException(e);
     console.error(e);
@@ -54,6 +64,7 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
       sentry,
       date,
       lastModified,
+      iteration,
       data,
       "IGD21",
       config.IGD21.telegram,
@@ -63,6 +74,7 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
       sentry,
       date,
       lastModified,
+      iteration,
       data,
       "IGD20",
       config.IGD20.telegram,
@@ -72,13 +84,13 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
 }
 
 async function fetchChanges(
-  actualLastModified: Date
+  actualLastModified: Date,
+  iteration: Iteration
 ): Promise<{ changes: Changes; images: string[] }> {
   const changesPdf = await fetchChangesPdf();
 
   const passedMs = actualLastModified.getTime() - Date.now();
   const passedTime = formatRelativeTime(passedMs);
-  const iteration = getIteration();
 
   const [changes, images] = await Promise.all([
     parseAndStoreChanges(changesPdf),
@@ -97,6 +109,7 @@ async function processClass(
   sentry: Toucan,
   date: Date,
   lastModified: Date,
+  iteration: Iteration,
   data: { changes: Changes; images: string[] } | undefined,
   clazz: string,
   telegram: number[],
@@ -113,7 +126,6 @@ async function processClass(
 
   const passedTime = formatRelativeTime(lastModified.getTime() - Date.now());
 
-  const iteration = getIteration();
   const message = day
     ? `Der Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben.\n\nVertretungsplan für ${formatLongDateTime(
         date
