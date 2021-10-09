@@ -46,11 +46,11 @@ const DATA: { [day: number]: Iteration } = {
 };
 
 export function getIteration(date?: Date): Iteration | null {
-  const nextDay = Math.round(
-    (date?.getTime() ?? Date.now()) / 1000 / 60 / 60 / 24 + 2
+  const time = Math.round(
+    (date?.getTime() ?? Date.now()) / 1000 / 60 / 60 / 24
   );
 
-  for (let i = nextDay - 6; i <= nextDay; i++) {
+  for (let i = time - 6; i <= time; i++) {
     if (DATA[i]) {
       return DATA[i];
     }
