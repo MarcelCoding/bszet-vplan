@@ -4,6 +4,7 @@ import { applyIteration, getIteration } from "../iteration";
 import { IGD21 } from "./igd21";
 import { IGD20 } from "./igd20";
 import { getBorderCharacters, table } from "table";
+import {IG21} from "./ig21";
 
 const tableBorderCharacters = getBorderCharacters("void");
 
@@ -89,6 +90,8 @@ function getTimetable(clazz: string): Timetable | null {
       return IGD21;
     case "IGD20":
       return IGD20;
+    case "IG21":
+      return IG21;
     default:
       return null;
   }

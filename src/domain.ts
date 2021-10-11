@@ -106,19 +106,7 @@ export function getBlock(start: number) {
 
 export const W_R: Subject = { name: "W/R", aliases: ["wlr"] };
 export const EN: Subject = { name: "En", aliases: ["eng"] };
-export const EN_LK: Subject = { name: "En LK", aliases: ["lk-en"] };
-export const EN_GK: Subject = { name: "En GK", aliases: ["gk-en"] };
 export const MA: Subject = { name: "Ma" };
-export const MA_LK: Subject = { name: "Ma LK", aliases: ["lk-ma"] };
-export const MA_GK: Subject = { name: "Ma GK", aliases: ["gk-ma"] };
-export const LF_1_2: Subject = { name: "LF 1+2" };
-export const LF_5: Subject = { name: "LF 5" };
-export const LF_6: Subject = { name: "LF 6" };
-export const LF_6_7_9: Subject = { name: "LF 6+7+9" };
-export const LF_8: Subject = { name: "LF 8" };
-export const LF_10: Subject = { name: "LF 10" };
-export const LF_11: Subject = { name: "LF 11" };
-export const BK: Subject = { name: "BK" };
 export const BK_1: Subject = { name: "BK 1" };
 export const BK_2: Subject = { name: "BK 2" };
 export const IS: Subject = { name: "IS" };
@@ -129,37 +117,42 @@ export const ETH: Subject = { name: "Eth" };
 export const FRZ: Subject = { name: "FRZ", aliases: ["frz b", "f-b"] };
 export const RU: Subject = { name: "RU", aliases: ["ru b", "r-b"] };
 export const D: Subject = { name: "D", aliases: ["de", "deu"] };
-export const PH: Subject = { name: "Ph", aliases: ["phy"] };
-export const CH: Subject = { name: "Ch" };
-
+export const CH_1: Subject = { name: "CH 1" };
+export const CH_2 : Subject = { name: "CH 2" };
+export const INFO : Subject = { name: "Info" };
+export const Bio_2 : Subject = { name: "Bio 2" };
+export const Bio_1 : Subject = { name: "Bio 1" };
+export const PH_1 : Subject = { name: "Ph 1", aliases: ["phy 1"] };
+export const PH_2 : Subject = { name: "Ph 2", aliases: ["phy 2"] };
+export const INFO_1 : Subject = { name: "Info 1" };
+export const INFO_2 : Subject = { name: "Info 2" };
+export const REL : Subject = { name: "Rel" };
+export const F_EN: Subject = {name: "F-En" };
 const subjects = [
+  CH_1,
+  CH_2,
+  Bio_1,
+  Bio_2,
+  PH_1,
+  PH_2,
   W_R,
-  EN,
-  EN_LK,
-  EN_GK,
-  MA,
-  MA_LK,
-  MA_GK,
-  LF_1_2,
-  LF_5,
-  LF_6,
-  LF_6_7_9,
-  LF_8,
-  LF_10,
-  LF_11,
-  BK,
+  INFO,
   BK_1,
   BK_2,
-  IS,
-  LIT,
-  SP,
-  GE,
+  INFO_1,
+  INFO_2,
+  REL,
+  D,
+  EN,
   ETH,
   FRZ,
+  GE,
+  LIT,
+  MA,
   RU,
-  D,
-  PH,
-  CH,
+  SP,
+  IS,
+  F_EN,
 ];
 
 export function getSubject(value: string): Subject {
