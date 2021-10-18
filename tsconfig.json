@@ -7,7 +7,6 @@
     "target": "ESNext",
     "lib": [
       "ESNext",
-      "WebWorker"
     ],
     "allowJs": false,
     "moduleResolution": "node",
