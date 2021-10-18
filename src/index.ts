@@ -5,9 +5,11 @@ import { fetchChanges } from "./changes";
 import { vPlanCron } from "./vplan";
 import Toucan from "toucan-js";
 
-async function handleCron(sentry: Toucan): Promise<unknown> {
-  // if more, use Promise.all
-  return vPlanCron(sentry);
+async function handleCron(sentry: Toucan): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // if more, use Promise.all
+    vPlanCron(sentry).then(() => resolve()).catch(reject);
+  });
 }
 
 const router = Router()
