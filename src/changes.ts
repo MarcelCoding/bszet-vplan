@@ -73,7 +73,7 @@ export async function parseAndStoreChanges(changesPdf: Blob): Promise<Changes> {
     );
   }
 
-  const changes = await response.json();
+  const changes = await response.json<Changes>();
   await setStoredChanges(changes);
 
   return changes;
