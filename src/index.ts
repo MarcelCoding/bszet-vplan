@@ -12,15 +12,12 @@ async function handleCron(sentry: Toucan): Promise<unknown> {
 
 const router = Router()
   .get("/image/:id", (request) =>
-    // @ts-ignore
     fetch(`${API_URL}/img/${request.params?.id}`, {
-      // @ts-ignore
       headers: { Authorization: `Bearer ${API_KEY}` },
     })
   )
   .get("/timetable/changes", async (request) => {
     const key = request.query?.key;
-    // @ts-ignore
     if (!key || key !== OWN_API_KEY) {
       return new Response("Bad Api Key", { status: 403 });
     }
@@ -31,7 +28,6 @@ const router = Router()
   })
   .get("/timetable/:clazz", async (request) => {
     const key = request.query?.key;
-    // @ts-ignore
     if (!key || key !== OWN_API_KEY) {
       return new Response("Bad Api Key", { status: 403 });
     }
@@ -57,7 +53,8 @@ const router = Router()
 
     return new Response(
       JSON.stringify(
-        await getActualTimetable(clazz, date, await fetchChanges()), (k, v) => v === undefined ? null : v,
+        await getActualTimetable(clazz, date, await fetchChanges()),
+        (k, v) => (v === undefined ? null : v)
       ),
       {
         headers: { "Content-Type": "application/json" },

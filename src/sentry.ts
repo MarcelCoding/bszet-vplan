@@ -5,7 +5,6 @@ export function initSentry(
   additionalOptions = {}
 ) {
   const sentry = new Toucan({
-    // @ts-ignore
     dsn: SENTRY_DSN,
     event: event,
     allowedHeaders: [

@@ -46,6 +46,7 @@ function isInRange(start: number, value: number, end: number) {
 export function formatDateTime(date: Date) {
   return dateTimeFormat.format(date);
 }
+
 export function formatLongDateTime(date: Date) {
   return longDateTimeFormat.format(date);
 }
@@ -64,16 +65,11 @@ export async function pdf2Img(
   params.append("top2-text", line2);
   params.append("bottom-text", line3);
 
-  const response = await fetch(
-    // @ts-ignore
-    `${API_URL}/pdf2img?${params.toString()}`,
-    {
-      method: "POST",
-      body: data,
-      // @ts-ignore
-      headers: { Authorization: `Bearer ${API_KEY}` },
-    }
-  );
+  const response = await fetch(`${API_URL}/pdf2img?${params.toString()}`, {
+    method: "POST",
+    body: data,
+    headers: { Authorization: `Bearer ${API_KEY}` },
+  });
 
   if (response.status !== 200) {
     throw new Error(

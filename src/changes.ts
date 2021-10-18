@@ -8,7 +8,6 @@ import {
 
 const CHANGES_PDF_URL =
   "https://geschuetzt.bszet.de/s-lk-vw/Vertretungsplaene/vertretungsplan-bgy.pdf";
-// @ts-ignore
 const PARSE_CHANGES_URL = `${API_URL}/parse-pdf`;
 
 export async function checkChangesAndUpdate(): Promise<{
@@ -33,7 +32,6 @@ export async function checkChangesAndUpdate(): Promise<{
 
 export async function fetchChangesPdf(): Promise<Blob> {
   const response = await fetch(CHANGES_PDF_URL, {
-    // @ts-ignore
     headers: { Authorization: "Basic " + btoa(USER + ":" + PASS) },
   });
 
@@ -63,7 +61,6 @@ export async function parseAndStoreChanges(changesPdf: Blob): Promise<Changes> {
   const response = await fetch(PARSE_CHANGES_URL, {
     method: "POST",
     body: body,
-    // @ts-ignore
     headers: { Authorization: `Bearer ${API_KEY}` },
   });
 
@@ -82,7 +79,6 @@ export async function parseAndStoreChanges(changesPdf: Blob): Promise<Changes> {
 async function fetchChangesPdfLastModified(): Promise<string> {
   const response = await fetch(CHANGES_PDF_URL, {
     method: "HEAD",
-    // @ts-ignore
     headers: { Authorization: "Basic " + btoa(USER + ":" + PASS) },
   });
 
