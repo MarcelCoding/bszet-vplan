@@ -1,4 +1,3 @@
-// @ts-ignore
 const API_BASE_URL = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
 
 export async function notifyTelegram(
@@ -31,14 +30,12 @@ async function sendImages(
 
   if (images.length === 1) {
     url = "sendPhoto";
-    // @ts-ignore
     body = { photo: `${IMAGE_BASE_URL}/image/${images[0]}` };
   } else {
     url = "sendMediaGroup";
     body = {
       media: images.map((image) => ({
         type: "photo",
-        // @ts-ignore
         media: `${IMAGE_BASE_URL}/image/${image}`,
       })),
     };

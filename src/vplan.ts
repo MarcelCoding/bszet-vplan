@@ -56,7 +56,6 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
     console.error(e);
   }
 
-  // @ts-ignore
   const config: Config = JSON.parse(CONFIG);
 
   return Promise.all([

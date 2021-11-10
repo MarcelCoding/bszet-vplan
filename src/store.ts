@@ -20,16 +20,13 @@ export async function setStoredChanges(changes?: Changes): Promise<void> {
 }
 
 async function get<T>(key: string): Promise<T | null> {
-  // @ts-ignore
   return BSZET_VPLAN.get(key, { type: "json" });
 }
 
 async function put<T>(key: string, value: T): Promise<void> {
-  // @ts-ignore
   return BSZET_VPLAN.put(key, JSON.stringify(value));
 }
 
 async function remove(key: string): Promise<void> {
-  // @ts-ignore
   return BSZET_VPLAN.delete(key);
 }
