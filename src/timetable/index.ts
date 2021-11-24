@@ -12,7 +12,9 @@ export function getAsciiTimetable(timetable: Day): string {
 
   return (
     table(
-      timetable.map((lesson) => formatLesson(lesson, hasNote)),
+      timetable
+        .sort((a, b) => b.time.start - a.time.start)
+        .map((lesson) => formatLesson(lesson, hasNote)),
       { border: tableBorderCharacters }
     )
       // workaround to remove space on front and behind table (issue #17)
