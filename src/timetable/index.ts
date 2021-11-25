@@ -13,7 +13,7 @@ export function getAsciiTimetable(timetable: Day): string {
   return (
     table(
       timetable
-        .sort((a, b) => b.time.start - a.time.start)
+        .sort((a, b) => a.time.start - b.time.start)
         .map((lesson) => formatLesson(lesson, hasNote)),
       { border: tableBorderCharacters }
     )
