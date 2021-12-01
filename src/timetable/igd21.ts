@@ -43,7 +43,7 @@ export const IGD21: Timetable = {
     { time: BLOCK_4, iteration: 2, subject: SP, place: "Kästner" },
   ],
   wed: [
-    { time: BLOCK_1, subject: GE, place: "B 108" },
+    { time: BLOCK_1, subject: GE, place: "B 110" },
     { time: BLOCK_2, subject: IS, place: "B 3" },
     { time: BLOCK_3, iteration: 1, subject: ETH, place: "B 306" },
     { time: BLOCK_3, iteration: 2, subject: LF_5, place: "B 405" },
