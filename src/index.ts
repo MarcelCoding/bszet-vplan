@@ -8,7 +8,9 @@ import Toucan from "toucan-js";
 async function handleCron(sentry: Toucan): Promise<void> {
   return new Promise((resolve, reject) => {
     // if more, use Promise.all
-    vPlanCron(sentry).then(() => resolve()).catch(reject);
+    vPlanCron(sentry)
+      .then(() => resolve())
+      .catch(reject);
   });
 }
 

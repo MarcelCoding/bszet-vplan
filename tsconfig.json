@@ -5,13 +5,9 @@
     "noImplicitAny": true,
     "module": "ESNext",
     "target": "ESNext",
-    "lib": [
-      "ESNext",
-    ],
+    "lib": ["ESNext"],
     "allowJs": false,
     "moduleResolution": "node",
-    "types": [
-      "@cloudflare/workers-types"
-    ]
+    "types": ["@cloudflare/workers-types"]
   }
 }

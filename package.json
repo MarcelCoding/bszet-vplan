@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack",
     "publish": "wrangler publish --env staging",
-    "publish:prod": "wrangler publish --env production"
+    "publish:prod": "wrangler publish --env production",
+    "format": "prettier --write ."
   },
   "keywords": [],
   "author": "",

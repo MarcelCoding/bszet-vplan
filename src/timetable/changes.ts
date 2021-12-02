@@ -30,7 +30,7 @@ export function applyChanges(timetable: Day, changes: TimetableChange[]): void {
   });
 
   if (sort) {
-    timetable.sort((a, b) => b.time.start - a.time.start);
+    timetable.sort((a, b) => a.time.start - b.time.start);
   }
 
   // botch: set lesson cancel to false for api
@@ -115,6 +115,7 @@ function handleAdd(timetable: Day, change: TimetableChange): boolean {
   if (lesson?.cancel) {
     lesson.subject = getSubject(change.subject.to);
     lesson.place = change.room.to;
+    lesson.cancel = false;
     applyMessage(lesson, change.message);
     return false;
   }
