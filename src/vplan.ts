@@ -47,10 +47,14 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
     throw new Error("Unable to gather iteration.");
   }
 
-  let data;
+  let pdf;
+  let changes;
 
   try {
-    data = await fetchChanges(lastModified, iteration);
+    pdf = await fetchChangesPdf();
+    if (pdf) {
+      changes = await parseAndStoreChanges(pdf);
+    }
   } catch (e) {
     sentry.captureException(e);
     console.error(e);
@@ -64,7 +68,8 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
       date,
       lastModified,
       iteration,
-      data,
+      pdf,
+      changes,
       "IGD21",
       config.IGD21.telegram,
       config.IGD21.discord
@@ -74,7 +79,8 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
       date,
       lastModified,
       iteration,
-      data,
+      pdf,
+      changes,
       "IGD20",
       config.IGD20.telegram,
       config.IGD20.discord
@@ -82,34 +88,13 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
   ]);
 }
 
-async function fetchChanges(
-  actualLastModified: Date,
-  iteration: Iteration
-): Promise<{ changes: Changes; images: string[] }> {
-  const changesPdf = await fetchChangesPdf();
-
-  const passedMs = actualLastModified.getTime() - Date.now();
-  const passedTime = formatRelativeTime(passedMs);
-
-  const [changes, images] = await Promise.all([
-    parseAndStoreChanges(changesPdf),
-    pdf2Img(
-      changesPdf,
-      formatDateTime(actualLastModified),
-      `${passedTime} aktualisiert`,
-      `Turnus ${iteration}`
-    ),
-  ]);
-
-  return { changes, images };
-}
-
 async function processClass(
   sentry: Toucan,
   date: Date,
   lastModified: Date,
   iteration: Iteration,
-  data: { changes: Changes; images: string[] } | undefined,
+  pdf: Blob | undefined,
+  changes: Changes | undefined,
   clazz: string,
   telegram: number[],
   discord: string[]
@@ -117,13 +102,24 @@ async function processClass(
   let day;
 
   try {
-    if (data) day = await getActualTimetable(clazz, date, data.changes);
+    if (changes) day = await getActualTimetable(clazz, date, changes);
   } catch (e) {
     sentry.captureException(e);
     console.error(e);
   }
 
   const passedTime = formatRelativeTime(lastModified.getTime() - Date.now());
+
+  let images;
+
+  if (pdf) {
+    images = await pdf2Img(
+      pdf,
+      formatDateTime(lastModified),
+      `${passedTime} aktualisiert`,
+      `Turnus ${iteration}`
+    );
+  }
 
   const message = day
     ? `Der Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben.\n\nVertretungsplan für ${formatLongDateTime(
@@ -132,5 +128,5 @@ async function processClass(
         day.timetable
       )}\n\`\`\``
     : `Die PDF Api konnte nicht erreicht werden.\n\nDer Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben. Hier die Änderungen ansehen ${CHANGES_PDF_URL}. Der aktuelle Turnus ist ${iteration}.`;
-  return notify(message, data?.images, telegram, discord);
+  return notify(message, images, telegram, discord);
 }
