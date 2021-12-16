@@ -53,7 +53,7 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
   try {
     pdf = await fetchChangesPdf();
     if (pdf) {
-      changes = await parseAndStoreChanges(pdf);
+      changes = await parseAndStoreChanges(sentry, pdf);
     }
   } catch (e) {
     sentry.captureException(e);

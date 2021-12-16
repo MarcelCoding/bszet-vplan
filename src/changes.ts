@@ -5,10 +5,12 @@ import {
   setStoredChanges,
   setStoredLastModified,
 } from "./store";
+import Toucan from "toucan-js";
 
 const CHANGES_PDF_URL =
   "https://geschuetzt.bszet.de/s-lk-vw/Vertretungsplaene/vertretungsplan-bgy.pdf";
 const PARSE_CHANGES_URL = `${API_URL}/parse-pdf`;
+const ARCHIVE_CHANGES_URL = `${API_URL}/store-pdf`;
 
 export async function checkChangesAndUpdate(): Promise<{
   lastModified: Date;
@@ -44,25 +46,40 @@ export async function fetchChangesPdf(): Promise<Blob> {
   return response.blob();
 }
 
-export async function fetchChanges(): Promise<Changes> {
+export async function fetchChanges(sentry: Toucan): Promise<Changes> {
   const storedChanges = await getStoredChanges();
   if (storedChanges) {
     return storedChanges;
   }
 
   const changesPdf = await fetchChangesPdf();
-  return await parseAndStoreChanges(changesPdf);
+  return await parseAndStoreChanges(sentry, changesPdf);
 }
 
-export async function parseAndStoreChanges(changesPdf: Blob): Promise<Changes> {
+export async function parseAndStoreChanges(
+  sentry: Toucan,
+  changesPdf: Blob
+): Promise<Changes> {
   const body = new FormData();
   body.append("file", changesPdf);
 
-  const response = await fetch(PARSE_CHANGES_URL, {
+  const parseRequest = fetch(PARSE_CHANGES_URL, {
     method: "POST",
     body: body,
     headers: { Authorization: `Bearer ${API_KEY}` },
   });
+
+  const [response, _] = await Promise.all([
+    parseRequest,
+    new Promise((resolve) => {
+      archivePdf(changesPdf)
+        .then(resolve)
+        .catch((reason) => {
+          sentry.captureException(reason);
+          console.error(reason);
+        });
+    }),
+  ]);
 
   if (response.status !== 200) {
     throw new Error(
@@ -95,4 +112,21 @@ async function fetchChangesPdfLastModified(): Promise<string> {
   }
 
   return lastModified;
+}
+
+async function archivePdf(changesPdf: Blob): Promise<void> {
+  const body = new FormData();
+  body.append("file", changesPdf);
+
+  const response = await fetch(ARCHIVE_CHANGES_URL, {
+    method: "POST",
+    body: body,
+    headers: { Authorization: `Bearer ${API_KEY}` },
+  });
+
+  if (response.status !== 200) {
+    throw new Error(
+      `Error while archiving changes pdf file: ${response.status} ${response.statusText}`
+    );
+  }
 }

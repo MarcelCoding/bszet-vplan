@@ -26,7 +26,8 @@ const router = Router()
       return new Response("Bad Api Key", { status: 403 });
     }
 
-    return new Response(JSON.stringify(await fetchChanges()), {
+    // @ts-ignore
+    return new Response(JSON.stringify(await fetchChanges(request.sentry)), {
       headers: { "Content-Type": "application/json" },
     });
   })
@@ -57,7 +58,12 @@ const router = Router()
 
     return new Response(
       JSON.stringify(
-        await getActualTimetable(clazz, date, await fetchChanges()),
+        await getActualTimetable(
+          clazz,
+          date,
+          // @ts-ignore
+          await fetchChanges(request.sentry)
+        ),
         (k, v) => (v === undefined ? null : v)
       ),
       {
@@ -69,6 +75,8 @@ const router = Router()
 
 addEventListener("fetch", (event) => {
   const sentry = initSentry(event);
+  // @ts-ignore
+  event.request.sentry = sentry;
   event.respondWith(
     router.handle(event.request).catch((error: unknown) => {
       sentry.captureException(error);
