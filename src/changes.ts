@@ -118,7 +118,7 @@ async function archivePdf(changesPdf: Blob): Promise<void> {
   const body = new FormData();
   body.append("file", changesPdf);
 
-  const response = await fetch(PARSE_CHANGES_URL, {
+  const response = await fetch(ARCHIVE_CHANGES_URL, {
     method: "POST",
     body: body,
     headers: { Authorization: `Bearer ${API_KEY}` },
