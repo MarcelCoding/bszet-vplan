@@ -93,6 +93,8 @@ function handleChange(timetable: Day, change: TimetableChange): boolean {
     case "room-change":
       lesson.place = change.room.to;
       break;
+    case "other":
+      break;
     default:
       throw new Error(
         `Timetable change action "${change.action}" not implemented.`
