@@ -1,6 +1,6 @@
 import { Router } from "itty-router";
 import { initSentry } from "./sentry";
-import { getActualTimetable } from "./timetable";
+import { getActualTimetable, getDefaultTimetable } from "./timetable";
 import { fetchChanges } from "./changes";
 import { vPlanCron } from "./vplan";
 import Toucan from "toucan-js";
@@ -65,6 +65,40 @@ const router = Router()
           await fetchChanges(request.sentry)
         ),
         (k, v) => (v === undefined ? null : v)
+      ),
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  })
+  .get("/timetable/:clazz/default", async (request) => {
+    const key = request.query?.key;
+    if (!key || key !== OWN_API_KEY) {
+      return new Response("Bad Api Key", { status: 403 });
+    }
+
+    let date;
+
+    const rawDate = request.query?.date;
+
+    if (rawDate) {
+      try {
+        date = new Date(rawDate);
+      } catch (e) {
+        return new Response("Bad Date", { status: 404 });
+      }
+    } else {
+      date = new Date();
+    }
+
+    const clazz = request.params?.clazz;
+    if (!clazz) {
+      return new Response("Missing Class: /test/<class>", { status: 404 });
+    }
+
+    return new Response(
+      JSON.stringify(getDefaultTimetable(clazz, date), (k, v) =>
+        v === undefined ? null : v
       ),
       {
         headers: { "Content-Type": "application/json" },

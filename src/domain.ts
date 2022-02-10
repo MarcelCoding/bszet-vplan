@@ -52,7 +52,12 @@ export interface Change<T> {
   to: T;
 }
 
-export type Action = "cancellation" | "replacement" | "room-change" | "add" | "other";
+export type Action =
+  | "cancellation"
+  | "replacement"
+  | "room-change"
+  | "add"
+  | "other";
 
 export interface TimetableChange {
   classes: string[];

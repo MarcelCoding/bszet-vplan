@@ -43,7 +43,7 @@ async function sendImages(
     body.media![0].parse_mode = "markdown";
   }
 
-  return await fetch(`${API_BASE_URL}/${url}`, {
+  return fetch(`${API_BASE_URL}/${url}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: createBody(chatId, body),
