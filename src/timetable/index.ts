@@ -50,6 +50,15 @@ function formatSubject(lesson: Lesson): string {
     : lesson.subject.name;
 }
 
+export function getDefaultTimetable(clazz: string, date: Date) {
+  const fullTimetable = getTimetable(clazz);
+  if (!fullTimetable) {
+    throw new Error(`Class "${clazz}" not found.`);
+  }
+
+  return getDay(fullTimetable, date);
+}
+
 export async function getActualTimetable(
   clazz: string,
   date: Date,
@@ -57,12 +66,7 @@ export async function getActualTimetable(
 ): Promise<{ timetable: Day; changes: TimetableChange[] }> {
   const isoDate = date.toISOString().substring(0, 10);
 
-  const fullTimetable = getTimetable(clazz);
-  if (!fullTimetable) {
-    throw new Error(`Class "${clazz}" not found.`);
-  }
-
-  const timetable = getDay(fullTimetable, date);
+  const timetable = getDefaultTimetable(clazz, date);
 
   const changes = changesResponse.data.filter(
     (change) => change.classes.includes(clazz) && change.date === isoDate

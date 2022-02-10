@@ -53,7 +53,7 @@ export async function fetchChanges(sentry: Toucan): Promise<Changes> {
   }
 
   const changesPdf = await fetchChangesPdf();
-  return await parseAndStoreChanges(sentry, changesPdf);
+  return parseAndStoreChanges(sentry, changesPdf);
 }
 
 export async function parseAndStoreChanges(
