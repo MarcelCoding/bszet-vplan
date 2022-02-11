@@ -1,4 +1,11 @@
-import { Changes, Day, Lesson, Timetable, TimetableChange } from "../domain";
+import {
+  Changes,
+  Day,
+  Iteration,
+  Lesson,
+  Timetable,
+  TimetableChange,
+} from "../domain";
 import { applyChanges } from "./changes";
 import { applyIteration, getIteration } from "../iteration";
 import { IGD21 } from "./igd21";
@@ -63,7 +70,11 @@ export async function getActualTimetable(
   clazz: string,
   date: Date,
   changesResponse: Changes
-): Promise<{ timetable: Day; changes: TimetableChange[] }> {
+): Promise<{
+  timetable: Day;
+  changes: TimetableChange[];
+  iteration: Iteration;
+}> {
   const isoDate = date.toISOString().substring(0, 10);
 
   const timetable = getDefaultTimetable(clazz, date);
@@ -84,7 +95,7 @@ export async function getActualTimetable(
 
   applyChanges(clone, changes);
 
-  return { timetable: clone, changes };
+  return { timetable: clone, changes, iteration };
 }
 
 function getTimetable(clazz: string): Timetable | null {
