@@ -36,14 +36,14 @@ export const IGD21: Timetable = {
     { time: BLOCK_5, iteration: 2, subject: LIT, place: "B 4" },
   ],
   tue: [
-    { time: BLOCK_1, subject: MA, place: "B 12" },
+    { time: BLOCK_1, subject: GE, place: "B 12" },
     { time: BLOCK_2, subject: EN, place: "B 110" },
     { time: BLOCK_3, subject: LF_1_2, place: "B 03" },
     { time: BLOCK_4, iteration: 1, subject: BK_2, place: "A 06" },
     { time: BLOCK_4, iteration: 2, subject: SP, place: "Kästner" },
   ],
   wed: [
-    { time: BLOCK_1, subject: GE, place: "B 110" },
+    { time: BLOCK_1, subject: MA, place: "B 12" },
     { time: BLOCK_2, subject: IS, place: "B 3" },
     { time: BLOCK_3, iteration: 1, subject: ETH, place: "B 306" },
     { time: BLOCK_3, iteration: 2, subject: LF_5, place: "B 405" },
