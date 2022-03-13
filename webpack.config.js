@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-  entry: "./src/index.ts",
+  entry: "./src/main.ts",
   mode: "production",
   target: "webworker",
   devtool: "source-map",
