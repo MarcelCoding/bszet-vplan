@@ -121,6 +121,7 @@ export const LF_5: Subject = { name: "LF 5", aliases: ["is"] };
 export const LF_6: Subject = { name: "LF 6", aliases: ["info1", "info2"] };
 export const LF_6_7_9: Subject = { name: "LF 6+7+9" };
 export const LF_8: Subject = { name: "LF 8" };
+export const LF_8_X: Subject = { name: "LF 8 + X" };
 export const LF_10: Subject = { name: "LF 10" };
 export const LF_11: Subject = { name: "LF 11" };
 export const BK: Subject = { name: "BK" };
