@@ -29,7 +29,7 @@ export const IGD21: Timetable = {
   mon: [
     { time: BLOCK_2, subject: W_R, place: "B 8" },
     { time: BLOCK_3, iteration: 1, subject: EN, place: "B 12" },
-    { time: BLOCK_3, iteration: 2, subject: MA, place: "B 10" },
+    { time: BLOCK_3, iteration: 2, subject: MA, place: "B 106" },
     { time: BLOCK_4, subject: LF_6, place: "B 411", group: 1 },
     { time: BLOCK_4, subject: IS, place: "B 3", group: 2 },
     { time: BLOCK_5, iteration: 2, subject: BK_1, place: "A 06" },
