@@ -113,6 +113,7 @@ export const W_R: Subject = { name: "W/R", aliases: ["wlr"] };
 export const EN: Subject = { name: "En", aliases: ["eng"] };
 export const EN_LK: Subject = { name: "En LK", aliases: ["lk-en", "lk-eng"] };
 export const EN_GK: Subject = { name: "En GK", aliases: ["gk-en", "gk-eng"] };
+export const MAFAK: Subject = { name: "Ma Fö", aliases: ["mafak"] };
 export const MA: Subject = { name: "Ma" };
 export const MA_LK: Subject = { name: "Ma LK", aliases: ["lk-ma"] };
 export const MA_GK: Subject = { name: "Ma GK", aliases: ["gk-ma"] };
@@ -140,6 +141,7 @@ export const CH: Subject = { name: "Ch" };
 
 const subjects = [
   W_R,
+  MAFAK,
   EN,
   EN_LK,
   EN_GK,

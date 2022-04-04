@@ -18,6 +18,7 @@ import {
   LF_6,
   LIT,
   MA,
+  MAFAK,
   PH,
   RU,
   SP,
@@ -55,6 +56,7 @@ export const IGD21: Timetable = {
     { time: BLOCK_2, subject: MA, place: "B 10" },
     { time: BLOCK_3, subject: IS, place: "B 3" },
     { time: BLOCK_4, subject: PH, place: "B 110" },
+    { time: BLOCK_5, subject: MAFAK, place: "B 12" },
   ],
   fri: [
     { time: BLOCK_1, subject: IS, place: "B 312", group: 1 },
