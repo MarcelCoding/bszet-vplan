@@ -22,7 +22,7 @@ jobs:
       - run: pnpm install
       - run: pnpm run build
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: bszet-vplan
           path: ./dist
