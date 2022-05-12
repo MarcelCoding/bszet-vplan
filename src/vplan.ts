@@ -43,9 +43,12 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
     if (!(modified || (date.getUTCHours() === 15 && date.getUTCMinutes() <= 14))) {
       return;
     }
-    pdf = await fetchChangesPdf();
-    if (pdf) {
-      changes = await parseAndStoreChanges(sentry, pdf);
+
+    if (lm) {
+      pdf = await fetchChangesPdf();
+      if (pdf) {
+        changes = await parseAndStoreChanges(sentry, pdf);
+      }
     }
   }
   catch (e) {
@@ -84,7 +87,7 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
 async function processClass(
   sentry: Toucan,
   date: Date,
-  lastModified: Date | undefined,
+  lastModified: Date | undefined | null,
   iteration: Iteration,
   pdf: Blob | undefined,
   changes: Changes | undefined,
