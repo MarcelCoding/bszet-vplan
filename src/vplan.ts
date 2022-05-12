@@ -21,12 +21,8 @@ const CHANGES_PDF_URL =
 export async function vPlanCron(sentry: Toucan): Promise<unknown> {
   const date = new Date();
 
-  const { lastModified, modified } = await checkChangesAndUpdate();
-  if (
-    !(modified || (date.getUTCHours() === 15 && date.getUTCMinutes() <= 14))
-  ) {
-    return;
-  }
+  let pdf;
+  let changes;
 
   if (15 <= date.getUTCHours()) {
     date.setUTCDate(date.getUTCDate() + 1);
@@ -47,10 +43,11 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
     throw new Error("Unable to gather iteration.");
   }
 
-  let pdf;
-  let changes;
-
-  try {
+  try {  
+    const { lastModified, modified } = await checkChangesAndUpdate();
+    if (!(modified || (date.getUTCHours() === 15 && date.getUTCMinutes() <= 14))) {
+      return;
+    }
     pdf = await fetchChangesPdf();
     if (pdf) {
       changes = await parseAndStoreChanges(sentry, pdf);
@@ -127,6 +124,6 @@ async function processClass(
       )}. Der aktuelle Turnus ist ${iteration}.\n\n\`\`\`\n${getAsciiTimetable(
         day.timetable
       )}\n\`\`\``
-    : `Die PDF Api konnte nicht erreicht werden.\n\nDer Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben. Hier die Änderungen ansehen ${CHANGES_PDF_URL}. Der aktuelle Turnus ist ${iteration}.`;
+    : `Beim Verarbeiten des Vertretungsplans ist ein Fehler aufgetreten.\n\nDer Vertretungsplan wurde eventuell ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben. Hier die Änderungen ansehen ${CHANGES_PDF_URL}. Der aktuelle Turnus ist ${iteration}.`;
   return notify(message, images, telegram, discord);
 }
