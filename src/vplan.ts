@@ -6,15 +6,13 @@ import {notify} from "./notification";
 import {getActualTimetable, getAsciiTimetable, getDefaultTimetable} from "./timetable";
 import Toucan from "toucan-js";
 
-const CHANGES_PDF_URL =
-  "https://geschuetzt.bszet.de/s-lk-vw/Vertretungsplaene/vertretungsplan-bgy.pdf";
-
 export async function vPlanCron(sentry: Toucan): Promise<unknown> {
   const date = new Date();
 
   let pdf;
   let changes;
 
+  // starting at 15h display next day
   if (15 <= date.getUTCHours()) {
     date.setUTCDate(date.getUTCDate() + 1);
   }
@@ -40,7 +38,13 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
     const {lastModified: lm, modified} = await checkChangesAndUpdate();
     lastModified = lm;
 
-    if (!(modified || (date.getUTCHours() === 15 && date.getUTCMinutes() <= 14))) {
+    // vplan wasn't modified
+    if (!modified) {
+      return;
+    }
+
+    // between 15:00 and 15:14 UTC show timetable anyway
+    if (!(date.getUTCHours() === 15 && date.getUTCMinutes() > 14)) {
       return;
     }
 
