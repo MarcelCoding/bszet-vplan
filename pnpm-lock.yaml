@@ -1,34 +1,34 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@cloudflare/workers-types': 3.4.0
-  '@cloudflare/wrangler': 1.19.8
-  '@rollup/plugin-commonjs': ^21.1.0
+  '@cloudflare/workers-types': 3.13.0
+  '@cloudflare/wrangler': 1.19.12
+  '@rollup/plugin-commonjs': ^22.0.0
   '@rollup/plugin-node-resolve': ^13.3.0
   '@rollup/plugin-typescript': ^8.3.3
-  itty-router: 2.5.2
+  itty-router: 2.6.1
   rollup: ^2.75.7
   rollup-plugin-terser: ^7.0.2
   table: 6.8.0
   toucan-js: 2.6.1
   tslib: ^2.4.0
-  typescript: 4.6.2
+  typescript: 4.7.4
 
 dependencies:
-  itty-router: 2.5.2
+  itty-router: 2.6.1
   table: 6.8.0
   toucan-js: 2.6.1
 
 devDependencies:
-  '@cloudflare/workers-types': 3.4.0
-  '@cloudflare/wrangler': 1.19.8
-  '@rollup/plugin-commonjs': 21.1.0_rollup@2.75.7
+  '@cloudflare/workers-types': 3.13.0
+  '@cloudflare/wrangler': 1.19.12
+  '@rollup/plugin-commonjs': 22.0.0_rollup@2.75.7
   '@rollup/plugin-node-resolve': 13.3.0_rollup@2.75.7
-  '@rollup/plugin-typescript': 8.3.3_7ravt3eaehmf3xw6ahgb73zrku
+  '@rollup/plugin-typescript': 8.3.3_g4qkabtmybowem44p7ts7jnbqm
   rollup: 2.75.7
   rollup-plugin-terser: 7.0.2_rollup@2.75.7
   tslib: 2.4.0
-  typescript: 4.6.2
+  typescript: 4.7.4
 
 packages:
 
@@ -53,12 +53,12 @@ packages:
       js-tokens: 4.0.0
     dev: true
 
-  /@cloudflare/workers-types/3.4.0:
-    resolution: {integrity: sha512-i/3czUrt6YqbOWl44OtIqd0cSZvEVXp/1oD/DZylC4PHZL3q/BhbamdEVeVhc/HPk4iD/7MZ2HGaIMO4Z4b12A==}
+  /@cloudflare/workers-types/3.13.0:
+    resolution: {integrity: sha512-oyhzfYlWBLgd9odJ/WHcsD/8B+IaAjSD+OcPEGLzX5kGRONjwcW3NY0WQfsVIhQzZ6AbPzjwkmj4D2VFwU1xRQ==}
     dev: true
 
-  /@cloudflare/wrangler/1.19.8:
-    resolution: {integrity: sha512-bckvdgBT3ZkvJQtGhdWEwa7GKi3zWYlxBPQoaOa+Utqw4bzg3BkbzUouI8+7WmcvkOoLxQ2emgTTNfudHBcCqA==}
+  /@cloudflare/wrangler/1.19.12:
+    resolution: {integrity: sha512-ALuQDzJetYGqzNuIa3KY8S8X9rvZjIh5uEY3nK31jV/EmBamiiSJn4XIdPuSn65FaEmmZem78OJIWFyu80OIuA==}
     hasBin: true
     requiresBuild: true
     dependencies:
@@ -106,11 +106,11 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.13
     dev: true
 
-  /@rollup/plugin-commonjs/21.1.0_rollup@2.75.7:
-    resolution: {integrity: sha512-6ZtHx3VHIp2ReNNDxHjuUml6ur+WcQ28N1yHgCQwsbNkQg2suhxGMDQGJOn/KuDxKtd1xuZP5xSTwBA4GQ8hbA==}
-    engines: {node: '>= 8.0.0'}
+  /@rollup/plugin-commonjs/22.0.0_rollup@2.75.7:
+    resolution: {integrity: sha512-Ktvf2j+bAO+30awhbYoCaXpBcyPmJbaEUYClQns/+6SNCYFURbvBiNbWgHITEsIgDDWCDUclWRKEuf8cwZCFoQ==}
+    engines: {node: '>= 12.0.0'}
     peerDependencies:
-      rollup: ^2.38.3
+      rollup: ^2.68.0
     dependencies:
       '@rollup/pluginutils': 3.1.0_rollup@2.75.7
       commondir: 1.0.1
@@ -137,7 +137,7 @@ packages:
       rollup: 2.75.7
     dev: true
 
-  /@rollup/plugin-typescript/8.3.3_7ravt3eaehmf3xw6ahgb73zrku:
+  /@rollup/plugin-typescript/8.3.3_g4qkabtmybowem44p7ts7jnbqm:
     resolution: {integrity: sha512-55L9SyiYu3r/JtqdjhwcwaECXP7JeJ9h1Sg1VWRJKIutla2MdZQodTgcCNybXLMCnqpNLEhS2vGENww98L1npg==}
     engines: {node: '>=8.0.0'}
     peerDependencies:
@@ -152,7 +152,7 @@ packages:
       resolve: 1.22.1
       rollup: 2.75.7
       tslib: 2.4.0
-      typescript: 4.6.2
+      typescript: 4.7.4
     dev: true
 
   /@rollup/pluginutils/3.1.0_rollup@2.75.7:
@@ -342,7 +342,7 @@ packages:
     dev: true
 
   /concat-map/0.0.1:
-    resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+    resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
     dev: true
 
   /cookie/0.5.0:
@@ -482,8 +482,8 @@ packages:
       '@types/estree': 0.0.51
     dev: true
 
-  /itty-router/2.5.2:
-    resolution: {integrity: sha512-igVdp/qoMe7aMnwB1eI9OCgV9HGyQlQ9LBDWPMSDkoYv7SpcxZp0t86noQcXKCSVK2B7y7z8d5SiaNbRMLUIyg==}
+  /itty-router/2.6.1:
+    resolution: {integrity: sha512-l9gxWe5TOLUESYnBn85Jxd6tIZLWdRX5YKkHIBfSgbNQ7UFPNUGuWihRV+LlEbfJJIzgLmhwAbaWRi5yWJm8kg==}
     dev: false
 
   /jest-worker/26.6.2:
@@ -770,8 +770,8 @@ packages:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
     dev: true
 
-  /typescript/4.6.2:
-    resolution: {integrity: sha512-HM/hFigTBHZhLXshn9sN37H085+hQGeJHJ/X7LpBWLID/fbc2acUMfU+lGD98X81sKP+pFa9f0DZmCwB9GnbAg==}
+  /typescript/4.7.4:
+    resolution: {integrity: sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
