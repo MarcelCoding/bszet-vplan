@@ -173,15 +173,15 @@ const subjects = [
 export function getSubjects(value: string): Subject[] {
   const query = value.toLowerCase();
 
-  const found_subjects = subjects.filter((subject) => subject.aliases?.includes(query));
-  const found_name_subject = subjects.find((subject) => subject.name === query);
-  if (found_name_subject) {
-    found_subjects.splice(0, 0, found_name_subject);
+  const foundSubjects = subjects.filter((subject) => subject.aliases?.includes(query));
+  const foundNameSubjects = subjects.find((subject) => subject.name === query);
+  if (foundNameSubjects) {
+    foundSubjects.splice(0, 0, foundNameSubjects);
   }
 
-  if (found_subjects.length === 0) {
+  if (foundSubjects.length === 0) {
     throw new Error(`Unable to find subject "${query}".`);
   }
 
-  return found_subjects;
+  return foundSubjects;
 }

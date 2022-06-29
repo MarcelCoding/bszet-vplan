@@ -77,15 +77,15 @@ function handleChange(timetable: Day, change: TimetableChange): boolean {
     );
   }
 
-  const subject_names = getSubjects(change.subject.from).map((subject) => subject.name);
-  const lesson = lessons.find((lesson) => subject_names.includes(lesson.subject.name));
+  const subjectNames = getSubjects(change.subject.from).map((subject) => subject.name);
+  const lesson = lessons.find((lesson) => subjectNames.includes(lesson.subject.name));
 
   if (!lesson) {
     const expectedSubjects = JSON.stringify(
       lessons.map((lesson) => lesson.subject.name)
     );
     throw new Error(
-      `Can not match subjects, expected: ${expectedSubjects}, actual: ${subject_names}`
+      `Can not match subjects, expected: ${expectedSubjects}, actual: ${subjectNames}`
     );
   }
 
