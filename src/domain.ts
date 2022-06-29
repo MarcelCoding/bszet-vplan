@@ -174,7 +174,7 @@ export function getSubjects(value: string): Subject[] {
   const query = value.toLowerCase();
 
   const foundSubjects = subjects.filter((subject) => subject.aliases?.includes(query));
-  const foundNameSubject = subjects.find((subject) => subject.name === query);
+  const foundNameSubject = subjects.find((subject) => subject.name.toLowerCase() === query);
   if (foundNameSubject) {
     foundSubjects.splice(0, 0, foundNameSubject);
   }
