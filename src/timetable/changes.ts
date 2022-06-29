@@ -1,7 +1,7 @@
 import {
   Day,
   getBlock,
-  getSubject,
+  getSubjects,
   Lesson,
   Subject,
   TimetableChange,
@@ -42,8 +42,12 @@ export function applyChanges(timetable: Day, changes: TimetableChange[]): void {
 }
 
 function handleCancel(timetable: Day, change: TimetableChange): void {
-  const subject = getSubject(change.subject.from);
-  const lesson = getLesson(timetable, change.lesson, subject);
+  const subjects = getSubjects(change.subject.from);
+
+  let lesson: Lesson | undefined;
+  subjects.every((subject) =>
+      !(lesson = getLesson(timetable, change.lesson, subject))
+  );
 
   if (!lesson) {
     throw new Error(
@@ -73,15 +77,15 @@ function handleChange(timetable: Day, change: TimetableChange): boolean {
     );
   }
 
-  const subject = getSubject(change.subject.from).name;
-  const lesson = lessons.find((lesson) => lesson.subject.name === subject);
+  const subject_names = getSubjects(change.subject.from).map((subject) => subject.name);
+  const lesson = lessons.find((lesson) => subject_names.includes(lesson.subject.name));
 
   if (!lesson) {
     const expectedSubjects = JSON.stringify(
       lessons.map((lesson) => lesson.subject.name)
     );
     throw new Error(
-      `Can not match subjects, expected: ${expectedSubjects}, actual: ${subject}`
+      `Can not match subjects, expected: ${expectedSubjects}, actual: ${subject_names}`
     );
   }
 
@@ -90,7 +94,7 @@ function handleChange(timetable: Day, change: TimetableChange): boolean {
 
   switch (change.action) {
     case "replacement":
-      lesson.subject = getSubject(change.subject.to);
+      lesson.subject = getSubjects(change.subject.to)[0];
       lesson.place = change.room.to;
       break;
     case "room-change":
@@ -112,13 +116,11 @@ function handleChange(timetable: Day, change: TimetableChange): boolean {
  * @return if the timetable has to be sorted
  */
 function handleAdd(timetable: Day, change: TimetableChange): boolean {
-  const subject = change.subject.from
-    ? getSubject(change.subject.from)
-    : undefined;
+  const subject = getSubjects(change.subject.from)[0];
   const lesson = getLesson(timetable, change.lesson, subject);
 
   if (lesson?.cancel) {
-    lesson.subject = getSubject(change.subject.to);
+    lesson.subject = getSubjects(change.subject.to)[0];
     lesson.place = change.room.to;
     lesson.cancel = false;
     applyMessage(lesson, change.message);
@@ -126,7 +128,7 @@ function handleAdd(timetable: Day, change: TimetableChange): boolean {
   }
 
   const newLesson = {
-    subject: getSubject(change.subject.to),
+    subject: getSubjects(change.subject.to)[0],
     place: change.room.to,
     time: getBlock(change.lesson),
     cancel: false,
@@ -143,7 +145,7 @@ function getLesson(
   time: number,
   subject?: Subject
 ): Lesson | undefined {
-  // currently there is no case where the same subjects with tow groups is at the same time
+  // currently there is no case where the same subjects with two groups is at the same time
   // if this would be the case I have also to check if the group is a match
   return timetable.find(
     (lesson) =>
