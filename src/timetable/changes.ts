@@ -71,7 +71,7 @@ function handleChange(timetable: Day, change: TimetableChange): boolean {
     (lesson) => lesson.time.start === change.lesson
   );
 
-  if (lessons.length == 0) {
+  if (lessons.length === 0) {
     throw new Error(
       `Change is outside the normal timetable: ${JSON.stringify(change)}`
     );
@@ -85,7 +85,7 @@ function handleChange(timetable: Day, change: TimetableChange): boolean {
       lessons.map((lesson) => lesson.subject.name)
     );
     throw new Error(
-      `Can not match subjects, expected: ${expectedSubjects}, actual: ${subjectNames}`
+      `Can not match subjects, expected: ${expectedSubjects}, actual: ${JSON.stringify(subjectNames)}`
     );
   }
 
@@ -143,14 +143,13 @@ function handleAdd(timetable: Day, change: TimetableChange): boolean {
 function getLesson(
   timetable: Day,
   time: number,
-  subject?: Subject
+  subject: Subject
 ): Lesson | undefined {
   // currently there is no case where the same subjects with two groups is at the same time
   // if this would be the case I have also to check if the group is a match
   return timetable.find(
     (lesson) =>
-      lesson.time.start === time &&
-      (!subject || lesson.subject.name == subject.name)
+      lesson.time.start === time && lesson.subject.name === subject.name
   );
 }
 
