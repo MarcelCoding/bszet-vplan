@@ -39,12 +39,9 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
     lastModified = lm;
 
     // vplan wasn't modified
-    if (!modified) {
-      return;
-    }
-
     // between 15:00 and 15:14 UTC show timetable anyway
-    if (!(date.getUTCHours() === 15 && date.getUTCMinutes() > 14)) {
+    if (!modified ||
+        !(date.getUTCHours() === 15 && date.getUTCMinutes() > 14)) {
       return;
     }
 
