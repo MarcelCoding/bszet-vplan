@@ -13,25 +13,25 @@ export async function setStoredLastModified(modified?: string | null): Promise<v
     modified = "";
   }
 
-  return modified ? put(LAST_MODIFIED, modified) : remove(LAST_MODIFIED);
+  return modified ? await put(LAST_MODIFIED, modified) : await remove(LAST_MODIFIED);
 }
 
 export async function getStoredChanges(): Promise<Changes | null> {
-  return get(CHANGES);
+  return await get(CHANGES);
 }
 
 export async function setStoredChanges(changes?: Changes): Promise<void> {
-  return changes ? put(CHANGES, changes) : remove(CHANGES);
+  return changes ? await put(CHANGES, changes) : await remove(CHANGES);
 }
 
 async function get<T>(key: string): Promise<T | null> {
-  return BSZET_VPLAN.get(key, {type: "json"});
+  return await BSZET_VPLAN.get(key, {type: "json"});
 }
 
 async function put<T>(key: string, value: T): Promise<void> {
-  return BSZET_VPLAN.put(key, JSON.stringify(value));
+  return await BSZET_VPLAN.put(key, JSON.stringify(value));
 }
 
 async function remove(key: string): Promise<void> {
-  return BSZET_VPLAN.delete(key);
+  return await BSZET_VPLAN.delete(key);
 }

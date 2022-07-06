@@ -7,7 +7,7 @@ import Toucan from "toucan-js";
 import {getIteration} from "./iteration";
 
 async function handleCron(sentry: Toucan): Promise<void> {
-  return new Promise((resolve, reject) => {
+  return await new Promise((resolve, reject) => {
     // if more, use Promise.all
     vPlanCron(sentry)
       .then(() => resolve())

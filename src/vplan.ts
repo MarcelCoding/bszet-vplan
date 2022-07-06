@@ -59,7 +59,7 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
 
   const config: Config = JSON.parse(CONFIG);
 
-  return Promise.all([
+  return await Promise.all([
     processClass(
       sentry,
       date,
@@ -134,5 +134,5 @@ async function processClass(
     message = "Beim Verarbeiten des Vertretungsplans ist ein Fehler aufgetreten.\n\n**> ACHTUNG UNTEN IST DER NORMALE STUNDENPLAN <**\n\n" + message;
   }
 
-  return notify(message, images, telegram, discord);
+  return await notify(message, images, telegram, discord);
 }
