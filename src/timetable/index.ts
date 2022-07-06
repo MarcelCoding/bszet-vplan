@@ -64,7 +64,7 @@ export function getDefaultTimetable(clazz: string, date: Date, iteration: Iterat
   }
 
   return getDay(fullTimetable, date)
-    .filter(lesson => lesson.iteration && lesson.iteration === iteration);
+    .filter(lesson => !lesson.iteration || lesson.iteration === iteration);
 }
 
 export async function getActualTimetable(
