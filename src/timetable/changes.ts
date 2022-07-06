@@ -116,14 +116,13 @@ function handleChange(timetable: Day, change: TimetableChange): boolean {
  * @return if the timetable has to be sorted
  */
 function handleAdd(timetable: Day, change: TimetableChange): boolean {
-  const subject = getSubjects(change.subject.from)[0];
-  const lesson = getLesson(timetable, change.lesson, subject);
+  const canceledLesson = getLessons(timetable, change.lesson).find(lesson => lesson.cancel);
 
-  if (lesson?.cancel) {
-    lesson.subject = getSubjects(change.subject.to)[0];
-    lesson.place = change.room.to;
-    lesson.cancel = false;
-    applyMessage(lesson, change.message);
+  if (canceledLesson) {
+    canceledLesson.subject = getSubjects(change.subject.to)[0];
+    canceledLesson.place = change.room.to;
+    canceledLesson.cancel = false;
+    applyMessage(canceledLesson, change.message);
     return false;
   }
 
@@ -151,6 +150,13 @@ function getLesson(
     (lesson) =>
       lesson.time.start === time && lesson.subject.name === subject.name
   );
+}
+
+function getLessons(
+    timetable: Day,
+    time: number,
+): Lesson[] {
+  return timetable.filter(lesson => lesson.time.start === time);
 }
 
 function applyMessage(lesson: Lesson, message: string): void {
