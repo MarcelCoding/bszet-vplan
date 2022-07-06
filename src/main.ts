@@ -4,6 +4,7 @@ import { getActualTimetable, getDefaultTimetable } from "./timetable";
 import { fetchChanges } from "./changes";
 import { vPlanCron } from "./vplan";
 import Toucan from "toucan-js";
+import {getIteration} from "./iteration";
 
 async function handleCron(sentry: Toucan): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -96,8 +97,13 @@ const router = Router()
       return new Response("Missing Class: /test/<class>", { status: 404 });
     }
 
+    const iteration = getIteration(date);
+    if (!iteration) {
+      throw new Error("Unable to gather iteration.");
+    }
+
     return new Response(
-      JSON.stringify(getDefaultTimetable(clazz, date), (k, v) =>
+      JSON.stringify(getDefaultTimetable(clazz, date,iteration), (k, v) =>
         v === undefined ? null : v
       ),
       {

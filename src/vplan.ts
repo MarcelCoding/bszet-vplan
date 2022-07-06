@@ -107,7 +107,7 @@ async function processClass(
   }
   finally {
     if (!day) {
-      day = {timetable: getDefaultTimetable(clazz, date)};
+      day = {timetable: getDefaultTimetable(clazz, date, iteration)};
     }
   }
 
