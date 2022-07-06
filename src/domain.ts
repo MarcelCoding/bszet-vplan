@@ -92,7 +92,7 @@ export const BLOCK_3: Time = { start: 5, duration: 2 };
 export const BLOCK_4: Time = { start: 7, duration: 2 };
 export const BLOCK_5: Time = { start: 9, duration: 2 };
 
-export function getBlock(start: number) {
+export function getBlock(start: number): Time {
   switch (start) {
     case 1:
       return BLOCK_1;
@@ -170,17 +170,18 @@ const subjects = [
   CH,
 ];
 
-export function getSubject(value: string): Subject {
+export function getSubjects(value: string): Subject[] {
   const query = value.toLowerCase();
 
-  const subject = subjects.find(
-    (subject) =>
-      subject.name.toLowerCase() === query || subject.aliases?.includes(query)
-  );
+  const foundSubjects = subjects.filter((subject) => subject.aliases?.includes(query));
+  const foundNameSubject = subjects.find((subject) => subject.name.toLowerCase() === query);
+  if (foundNameSubject) {
+    foundSubjects.splice(0, 0, foundNameSubject);
+  }
 
-  if (!subject) {
+  if (foundSubjects.length === 0) {
     throw new Error(`Unable to find subject "${query}".`);
   }
 
-  return subject;
+  return foundSubjects;
 }
