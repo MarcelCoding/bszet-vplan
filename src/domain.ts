@@ -139,7 +139,7 @@ export const D: Subject = { name: "D", aliases: ["de", "deu"] };
 export const PH: Subject = { name: "Ph", aliases: ["phy"] };
 export const CH: Subject = { name: "Ch" };
 
-const subjects = [
+const SUBJECTS = [
   W_R,
   MAFAK,
   EN,
@@ -173,10 +173,11 @@ const subjects = [
 export function getSubjects(value: string): Subject[] {
   const query = value.toLowerCase();
 
-  const foundSubjects = subjects.filter((subject) => subject.aliases?.includes(query));
-  const foundNameSubject = subjects.find((subject) => subject.name.toLowerCase() === query);
+  const foundSubjects = SUBJECTS.filter((subject) => subject.aliases?.includes(query));
+  const foundNameSubject = SUBJECTS.find((subject) => subject.name.toLowerCase() === query);
   if (foundNameSubject) {
     foundSubjects.splice(0, 0, foundNameSubject);
+    // return [foundNameSubject, ...foundSubjects];
   }
 
   if (foundSubjects.length === 0) {
