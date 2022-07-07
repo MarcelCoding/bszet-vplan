@@ -8,26 +8,26 @@ import {
 } from "../domain";
 
 export function applyChanges(timetable: Day, changes: TimetableChange[]): void {
-  changes.forEach((change) => {
+  for (const change of changes) {
     if (change.action !== "cancellation") {
-      return;
+      continue;
     }
     handleCancel(timetable, change);
-  });
+  }
 
   // If the "add change" action is applied and a new lesson was added
   // the timetable has to be sorted, because the add change
   // adds the subjects at the end.
   let sort = false;
 
-  changes.forEach((change) => {
+  for (const change of changes) {
     if (change.action === "cancellation") {
-      return;
+      continue;
     }
     if (handleChange(timetable, change)) {
       sort = true;
     }
-  });
+  }
 
   if (sort) {
     timetable.sort((a, b) => a.time.start - b.time.start);

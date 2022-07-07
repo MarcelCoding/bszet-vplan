@@ -98,6 +98,7 @@ async function processClass(
   discord: string[]
 ): Promise<unknown> {
   let day;
+  let error = false;
 
   try {
     if (changes) day = await getActualTimetable(clazz, date, changes);
@@ -105,6 +106,7 @@ async function processClass(
   catch (e) {
     sentry.captureException(e);
     console.error(e);
+    error = true;
   }
   finally {
     if (!day) {
@@ -131,7 +133,7 @@ async function processClass(
     day.timetable
   )}\n\`\`\``;
 
-  if (!changes) {
+  if (!changes || error) {
     message = "Beim Verarbeiten des Vertretungsplans ist ein Fehler aufgetreten.\n\n**> ACHTUNG UNTEN IST DER NORMALE STUNDENPLAN <**\n\n" + message;
   }
 
