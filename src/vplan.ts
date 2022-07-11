@@ -119,12 +119,17 @@ async function processClass(
   let images;
 
   if (pdf) {
-    images = await pdf2Img(
-      pdf,
-      lastModified ? formatDateTime(lastModified) : "404 pdf not found",
-      `${passedTime} aktualisiert`,
-      `Turnus ${iteration}`
-    );
+    try {
+      images = await pdf2Img(
+        pdf,
+        lastModified ? formatDateTime(lastModified) : "404 pdf not found",
+        `${passedTime} aktualisiert`,
+        `Turnus ${iteration}`
+      );
+    } catch (e) {
+      sentry.captureException(e);
+      console.error(e);
+    }
   }
 
   let message = `Der Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben.\n\nVertretungsplan für ${formatLongDateTime(
