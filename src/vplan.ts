@@ -40,9 +40,10 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
 
     // vplan wasn't modified
     // between 15:00 and 15:14 UTC show timetable anyway
-    if (!modified ||
-        !(date.getUTCHours() === 15 && date.getUTCMinutes() > 14)) {
-      return;
+    if (!modified) {
+      if (!(date.getUTCHours() === 15 && date.getUTCMinutes() > 14)) {
+        return;
+      }
     }
 
     if (lm) {
@@ -97,6 +98,7 @@ async function processClass(
   discord: string[]
 ): Promise<unknown> {
   let day;
+  let error = false;
 
   try {
     if (changes) day = await getActualTimetable(clazz, date, changes);
@@ -104,6 +106,7 @@ async function processClass(
   catch (e) {
     sentry.captureException(e);
     console.error(e);
+    error = true;
   }
   finally {
     if (!day) {
@@ -116,12 +119,17 @@ async function processClass(
   let images;
 
   if (pdf) {
-    images = await pdf2Img(
-      pdf,
-      lastModified ? formatDateTime(lastModified) : "404 pdf not found",
-      `${passedTime} aktualisiert`,
-      `Turnus ${iteration}`
-    );
+    try {
+      images = await pdf2Img(
+        pdf,
+        lastModified ? formatDateTime(lastModified) : "404 pdf not found",
+        `${passedTime} aktualisiert`,
+        `Turnus ${iteration}`
+      );
+    } catch (e) {
+      sentry.captureException(e);
+      console.error(e);
+    }
   }
 
   let message = `Der Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben.\n\nVertretungsplan für ${formatLongDateTime(
@@ -130,7 +138,7 @@ async function processClass(
     day.timetable
   )}\n\`\`\``;
 
-  if (!changes) {
+  if (!changes || error) {
     message = "Beim Verarbeiten des Vertretungsplans ist ein Fehler aufgetreten.\n\n**> ACHTUNG UNTEN IST DER NORMALE STUNDENPLAN <**\n\n" + message;
   }
 

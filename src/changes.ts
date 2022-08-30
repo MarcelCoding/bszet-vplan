@@ -66,12 +66,13 @@ export async function parseAndStoreChanges(
 
   const [response, _] = await Promise.all([
     parseRequest,
-    new Promise((resolve) => {
+    new Promise((resolve, reject) => {
       archivePdf(changesPdf)
         .then(resolve)
         .catch((reason) => {
           sentry.captureException(reason);
           console.error(reason);
+          reject(reason)
         });
     }),
   ]);
