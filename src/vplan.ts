@@ -41,7 +41,11 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
     // vplan wasn't modified
     // between 15:00 and 15:14 UTC show timetable anyway
     if (!modified) {
-      if (!(date.getUTCHours() === 15 && date.getUTCMinutes() > 14)) {
+      if (date.getUTCHours() !== 15) {
+        return;
+      }
+
+      if (date.getUTCMinutes() > 14) {
         return;
       }
     }
@@ -126,7 +130,8 @@ async function processClass(
         `${passedTime} aktualisiert`,
         `Turnus ${iteration}`
       );
-    } catch (e) {
+    }
+    catch (e) {
       sentry.captureException(e);
       console.error(e);
     }
