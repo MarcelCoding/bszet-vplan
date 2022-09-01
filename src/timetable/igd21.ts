@@ -1,5 +1,4 @@
 import {
-  BK_1,
   BK_2,
   BLOCK_1,
   BLOCK_2,
@@ -51,7 +50,6 @@ export const IGD21: Timetable = {
     { time: BLOCK_3, subject: D, place: "B 6" },
     { time: BLOCK_4, subject: EN_LK, place: "B 03" },
     { time: BLOCK_4, subject: MA_LK, place: "B 11" },
-    { time: BLOCK_5, iteration: 1, subject: BK_1, place: "A 06" },
     { time: BLOCK_5, iteration: 2, subject: LIT, place: "B 4"},
   ],
   thu: [
