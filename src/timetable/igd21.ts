@@ -1,5 +1,5 @@
 import {
-  BK,
+  BK_2,
   BLOCK_1,
   BLOCK_2,
   BLOCK_3,
