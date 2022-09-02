@@ -179,12 +179,8 @@ const SUBJECTS = [
 export function getSubjects(value: string): Subject[] {
   const query = value.toLowerCase();
 
-  const foundSubjects = SUBJECTS.filter((subject) =>
-    subject.aliases?.includes(query)
-  );
-  const foundNameSubject = SUBJECTS.find(
-    (subject) => subject.name.toLowerCase() === query
-  );
+  const foundSubjects = SUBJECTS.filter((subject) => subject.aliases?.includes(query));
+  const foundNameSubject = SUBJECTS.find((subject) => subject.name.toLowerCase() === query);
   if (foundNameSubject) {
     foundSubjects.splice(0, 0, foundNameSubject);
     // return [foundNameSubject, ...foundSubjects];
