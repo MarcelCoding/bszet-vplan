@@ -61,7 +61,7 @@ export const IGD21: Timetable = {
     { time: BLOCK_4, subject: SP, place: "117.GS" },
   ],
   fri: [
-    { time: BLOCK_1, subject: LF_7_10, place: "A 302", group: 1 },
+    { time: BLOCK_1, subject: LF_7_10, place: "B 405", group: 1 },
     { time: BLOCK_2, subject: FRZ, place: "A 102" },
     { time: BLOCK_2, subject: RU, place: "B 4" },
     { time: BLOCK_3, subject: EN_LK, place: "B 6" },
