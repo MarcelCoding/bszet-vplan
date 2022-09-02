@@ -121,7 +121,7 @@ export const LF_1_2: Subject = { name: "LF 1+2", aliases: ["is-gp"] };
 export const LF_5: Subject = { name: "LF 5", aliases: ["is"] };
 export const LF_6: Subject = { name: "LF 6", aliases: ["info1", "info2"] };
 export const LF_6_7_9: Subject = { name: "LF 6+7+9" };
-export const LF_7_10: Subject = { name: "LF 7+10"}
+export const LF_7_10: Subject = { name: "LF 7+10" };
 export const LF_8: Subject = { name: "LF 8" };
 export const LF_8_X: Subject = { name: "LF 8 + X" };
 export const LF_10: Subject = { name: "LF 10" };
@@ -139,6 +139,8 @@ export const RU: Subject = { name: "RU", aliases: ["ru b", "r-b"] };
 export const D: Subject = { name: "D", aliases: ["de", "deu"] };
 export const PH: Subject = { name: "Ph", aliases: ["phy"] };
 export const CH: Subject = { name: "Ch" };
+export const LF_13: Subject = { name: "LF 13" };
+export const LF_9_12: Subject = { name: "LF 9+12" };
 
 const SUBJECTS = [
   W_R,
@@ -170,6 +172,8 @@ const SUBJECTS = [
   D,
   PH,
   CH,
+  LF_13,
+  LF_9_12,
 ];
 
 export function getSubjects(value: string): Subject[] {
