@@ -24,7 +24,7 @@ import {
   Timetable,
 } from "../domain";
 
-export const IGD21: Timetable = {
+export const IGD20: Timetable = {
   mon: [
     { time: BLOCK_1, subject: EN_LK, place: "B 03" },
     { time: BLOCK_1, subject: MA_LK, place: "B 11" },
