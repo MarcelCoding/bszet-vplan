@@ -5,5 +5,5 @@ export async function notifyDiscord(hooks: string[], message: string) {
     body: JSON.stringify({ content: message }),
   };
 
-  return Promise.all(hooks.map((hook) => fetch(hook, request)));
+  return await Promise.all(hooks.map((hook) => fetch(hook, request)));
 }

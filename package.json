@@ -1,29 +1,28 @@
 {
   "name": "bszet-vplan",
-  "version": "1.0.0",
-  "description": "",
-  "main": "dist/worker.js",
+  "main": "dist/main.js",
+  "packageManager": "pnpm@7",
   "scripts": {
-    "build": "webpack",
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
     "publish": "wrangler publish --env staging",
     "publish:prod": "wrangler publish --env production",
-    "format": "prettier --write ."
+    "tail": "wrangler tail"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "itty-router": "2.5.1",
-    "table": "6.8.0",
-    "toucan-js": "2.5.0"
+    "itty-router": "^2.6.1",
+    "table": "^6.8.0",
+    "toucan-js": "^2.6.1"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "3.4.0",
-    "@cloudflare/wrangler": "1.19.3",
-    "prettier": "2.5.1",
-    "ts-loader": "9.2.5",
-    "typescript": "4.6.2",
-    "webpack": "5.70.0",
-    "webpack-cli": "4.9.0"
+    "@cloudflare/workers-types": "^3.15.0",
+    "@cloudflare/wrangler": "^1.19.12",
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-typescript": "^8.4.0",
+    "rollup": "^2.79.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.4.0",
+    "typescript": "^4.8.2"
   }
 }

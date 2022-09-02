@@ -77,5 +77,5 @@ export async function pdf2Img(
     );
   }
 
-  return response.json();
+  return await response.json();
 }

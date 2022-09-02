@@ -5,7 +5,7 @@ export async function notifyTelegram(
   message: string,
   images: string[] | undefined
 ): Promise<unknown> {
-  return Promise.all(
+  return await Promise.all(
     images?.length
       ? chatIds.map((chatId) => sendImages(chatId, message, images))
       : chatIds.map((chatId) => sendMessage(chatId, message))
@@ -43,7 +43,7 @@ async function sendImages(
     body.media![0].parse_mode = "markdown";
   }
 
-  return fetch(`${API_BASE_URL}/${url}`, {
+  return await fetch(`${API_BASE_URL}/${url}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: createBody(chatId, body),
@@ -51,7 +51,7 @@ async function sendImages(
 }
 
 async function sendMessage(chatId: number, message: string) {
-  return fetch(`${API_BASE_URL}/sendMessage`, {
+  return await fetch(`${API_BASE_URL}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: createBody(chatId, { text: message, parse_mode: "markdown" }),

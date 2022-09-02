@@ -1,10 +1,5 @@
-import { Changes } from "./domain";
-import {
-  getStoredChanges,
-  getStoredLastModified,
-  setStoredChanges,
-  setStoredLastModified,
-} from "./store";
+import {Changes} from "./domain";
+import {getStoredChanges, getStoredLastModified, setStoredChanges, setStoredLastModified,} from "./store";
 import Toucan from "toucan-js";
 
 const CHANGES_PDF_URL =
@@ -13,7 +8,7 @@ const PARSE_CHANGES_URL = `${API_URL}/parse-pdf`;
 const ARCHIVE_CHANGES_URL = `${API_URL}/store-pdf`;
 
 export async function checkChangesAndUpdate(): Promise<{
-  lastModified: Date;
+  lastModified: Date | null;
   modified: boolean;
 }> {
   const [actualLastModified, storedLastModified] = await Promise.all([
@@ -26,15 +21,15 @@ export async function checkChangesAndUpdate(): Promise<{
       setStoredLastModified(actualLastModified),
       setStoredChanges(),
     ]);
-    return { lastModified: new Date(actualLastModified), modified: true };
+    return {lastModified: actualLastModified ? new Date(actualLastModified) : null, modified: true};
   }
 
-  return { lastModified: new Date(actualLastModified), modified: false };
+  return {lastModified: new Date(actualLastModified), modified: false};
 }
 
 export async function fetchChangesPdf(): Promise<Blob> {
   const response = await fetch(CHANGES_PDF_URL, {
-    headers: { Authorization: "Basic " + btoa(USER + ":" + PASS) },
+    headers: {Authorization: "Basic " + btoa(USER + ":" + PASS)},
   });
 
   if (response.status !== 200) {
@@ -43,7 +38,7 @@ export async function fetchChangesPdf(): Promise<Blob> {
     );
   }
 
-  return response.blob();
+  return await response.blob();
 }
 
 export async function fetchChanges(sentry: Toucan): Promise<Changes> {
@@ -53,7 +48,7 @@ export async function fetchChanges(sentry: Toucan): Promise<Changes> {
   }
 
   const changesPdf = await fetchChangesPdf();
-  return parseAndStoreChanges(sentry, changesPdf);
+  return await parseAndStoreChanges(sentry, changesPdf);
 }
 
 export async function parseAndStoreChanges(
@@ -66,17 +61,18 @@ export async function parseAndStoreChanges(
   const parseRequest = fetch(PARSE_CHANGES_URL, {
     method: "POST",
     body: body,
-    headers: { Authorization: `Bearer ${API_KEY}` },
+    headers: {Authorization: `Bearer ${API_KEY}`},
   });
 
   const [response, _] = await Promise.all([
     parseRequest,
-    new Promise((resolve) => {
+    new Promise((resolve, reject) => {
       archivePdf(changesPdf)
         .then(resolve)
         .catch((reason) => {
           sentry.captureException(reason);
           console.error(reason);
+          reject(reason)
         });
     }),
   ]);
@@ -93,18 +89,16 @@ export async function parseAndStoreChanges(
   return changes;
 }
 
-async function fetchChangesPdfLastModified(): Promise<string> {
+async function fetchChangesPdfLastModified(): Promise<string | null> {
   const response = await fetch(CHANGES_PDF_URL, {
     method: "HEAD",
-    headers: { Authorization: "Basic " + btoa(USER + ":" + PASS) },
+    headers: {Authorization: "Basic " + btoa(USER + ":" + PASS)},
   });
 
   const lastModified = response.headers.get("last-modified");
 
   if (response.status !== 200) {
-    throw new Error(
-      `Error while fetching changes pdf file last modified state: ${response.status} ${response.statusText}`
-    );
+    return null;
   }
 
   if (!lastModified) {
@@ -121,7 +115,7 @@ async function archivePdf(changesPdf: Blob): Promise<void> {
   const response = await fetch(ARCHIVE_CHANGES_URL, {
     method: "POST",
     body: body,
-    headers: { Authorization: `Bearer ${API_KEY}` },
+    headers: {Authorization: `Bearer ${API_KEY}`},
   });
 
   if (response.status !== 200) {

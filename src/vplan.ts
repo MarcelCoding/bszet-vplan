@@ -1,33 +1,18 @@
-import {
-  checkChangesAndUpdate,
-  fetchChangesPdf,
-  parseAndStoreChanges,
-} from "./changes";
-import {
-  formatDateTime,
-  formatLongDateTime,
-  formatRelativeTime,
-  pdf2Img,
-} from "./utils";
-import { getIteration } from "./iteration";
-import { Changes, Config, Iteration } from "./domain";
-import { notify } from "./notification";
-import { getActualTimetable, getAsciiTimetable } from "./timetable";
+import {checkChangesAndUpdate, fetchChangesPdf, parseAndStoreChanges,} from "./changes";
+import {formatDateTime, formatLongDateTime, formatRelativeTime, pdf2Img,} from "./utils";
+import {getIteration} from "./iteration";
+import {Changes, Config, Iteration} from "./domain";
+import {notify} from "./notification";
+import {getActualTimetable, getAsciiTimetable, getDefaultTimetable} from "./timetable";
 import Toucan from "toucan-js";
-
-const CHANGES_PDF_URL =
-  "https://geschuetzt.bszet.de/s-lk-vw/Vertretungsplaene/vertretungsplan-bgy.pdf";
 
 export async function vPlanCron(sentry: Toucan): Promise<unknown> {
   const date = new Date();
 
-  const { lastModified, modified } = await checkChangesAndUpdate();
-  if (
-    !(modified || (date.getUTCHours() === 15 && date.getUTCMinutes() <= 14))
-  ) {
-    return;
-  }
+  let pdf;
+  let changes;
 
+  // starting at 15h display next day
   if (15 <= date.getUTCHours()) {
     date.setUTCDate(date.getUTCDate() + 1);
   }
@@ -47,22 +32,39 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
     throw new Error("Unable to gather iteration.");
   }
 
-  let pdf;
-  let changes;
+  let lastModified;
 
   try {
-    pdf = await fetchChangesPdf();
-    if (pdf) {
-      changes = await parseAndStoreChanges(sentry, pdf);
+    const {lastModified: lm, modified} = await checkChangesAndUpdate();
+    lastModified = lm;
+
+    // vplan wasn't modified
+    // between 15:00 and 15:14 UTC show timetable anyway
+    if (!modified) {
+      if (date.getUTCHours() !== 15) {
+        return;
+      }
+
+      if (date.getUTCMinutes() > 14) {
+        return;
+      }
     }
-  } catch (e) {
+
+    if (lm) {
+      pdf = await fetchChangesPdf();
+      if (pdf) {
+        changes = await parseAndStoreChanges(sentry, pdf);
+      }
+    }
+  }
+  catch (e) {
     sentry.captureException(e);
     console.error(e);
   }
 
   const config: Config = JSON.parse(CONFIG);
 
-  return Promise.all([
+  return await Promise.all([
     processClass(
       sentry,
       date,
@@ -91,7 +93,7 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
 async function processClass(
   sentry: Toucan,
   date: Date,
-  lastModified: Date,
+  lastModified: Date | undefined | null,
   iteration: Iteration,
   pdf: Blob | undefined,
   changes: Changes | undefined,
@@ -100,33 +102,50 @@ async function processClass(
   discord: string[]
 ): Promise<unknown> {
   let day;
+  let error = false;
 
   try {
     if (changes) day = await getActualTimetable(clazz, date, changes);
-  } catch (e) {
+  }
+  catch (e) {
     sentry.captureException(e);
     console.error(e);
+    error = true;
+  }
+  finally {
+    if (!day) {
+      day = {timetable: getDefaultTimetable(clazz, date, iteration)};
+    }
   }
 
-  const passedTime = formatRelativeTime(lastModified.getTime() - Date.now());
+  const passedTime = lastModified ? formatRelativeTime(lastModified.getTime() - Date.now()) : "kürzlich";
 
   let images;
 
   if (pdf) {
-    images = await pdf2Img(
-      pdf,
-      formatDateTime(lastModified),
-      `${passedTime} aktualisiert`,
-      `Turnus ${iteration}`
-    );
+    try {
+      images = await pdf2Img(
+        pdf,
+        lastModified ? formatDateTime(lastModified) : "404 pdf not found",
+        `${passedTime} aktualisiert`,
+        `Turnus ${iteration}`
+      );
+    }
+    catch (e) {
+      sentry.captureException(e);
+      console.error(e);
+    }
   }
 
-  const message = day
-    ? `Der Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben.\n\nVertretungsplan für ${formatLongDateTime(
-        date
-      )}. Der aktuelle Turnus ist ${iteration}.\n\n\`\`\`\n${getAsciiTimetable(
-        day.timetable
-      )}\n\`\`\``
-    : `Die PDF Api konnte nicht erreicht werden.\n\nDer Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben. Hier die Änderungen ansehen ${CHANGES_PDF_URL}. Der aktuelle Turnus ist ${iteration}.`;
-  return notify(message, images, telegram, discord);
+  let message = `Der Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben.\n\nVertretungsplan für ${formatLongDateTime(
+    date
+  )}. Der aktuelle Turnus ist ${iteration}.\n\n\`\`\`\n${getAsciiTimetable(
+    day.timetable
+  )}\n\`\`\``;
+
+  if (!changes || error) {
+    message = "Beim Verarbeiten des Vertretungsplans ist ein Fehler aufgetreten.\n\n**> ACHTUNG UNTEN IST DER NORMALE STUNDENPLAN <**\n\n" + message;
+  }
+
+  return await notify(message, images, telegram, discord);
 }

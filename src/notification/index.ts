@@ -7,7 +7,7 @@ export async function notify(
   telegram: number[],
   discord: string[]
 ) {
-  return Promise.all([
+  return await Promise.all([
     notifyTelegram(telegram, message, image),
     notifyDiscord(discord, message),
   ]);

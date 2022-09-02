@@ -92,7 +92,7 @@ export const BLOCK_3: Time = { start: 5, duration: 2 };
 export const BLOCK_4: Time = { start: 7, duration: 2 };
 export const BLOCK_5: Time = { start: 9, duration: 2 };
 
-export function getBlock(start: number) {
+export function getBlock(start: number): Time {
   switch (start) {
     case 1:
       return BLOCK_1;
@@ -113,6 +113,7 @@ export const W_R: Subject = { name: "W/R", aliases: ["wlr"] };
 export const EN: Subject = { name: "En", aliases: ["eng"] };
 export const EN_LK: Subject = { name: "En LK", aliases: ["lk-en", "lk-eng"] };
 export const EN_GK: Subject = { name: "En GK", aliases: ["gk-en", "gk-eng"] };
+export const MAFAK: Subject = { name: "Ma Fö", aliases: ["mafak"] };
 export const MA: Subject = { name: "Ma" };
 export const MA_LK: Subject = { name: "Ma LK", aliases: ["lk-ma"] };
 export const MA_GK: Subject = { name: "Ma GK", aliases: ["gk-ma"] };
@@ -120,6 +121,7 @@ export const LF_1_2: Subject = { name: "LF 1+2", aliases: ["is-gp"] };
 export const LF_5: Subject = { name: "LF 5", aliases: ["is"] };
 export const LF_6: Subject = { name: "LF 6", aliases: ["info1", "info2"] };
 export const LF_6_7_9: Subject = { name: "LF 6+7+9" };
+export const LF_7_10: Subject = { name: "LF 7+10"}
 export const LF_8: Subject = { name: "LF 8" };
 export const LF_8_X: Subject = { name: "LF 8 + X" };
 export const LF_10: Subject = { name: "LF 10" };
@@ -138,8 +140,9 @@ export const D: Subject = { name: "D", aliases: ["de", "deu"] };
 export const PH: Subject = { name: "Ph", aliases: ["phy"] };
 export const CH: Subject = { name: "Ch" };
 
-const subjects = [
+const SUBJECTS = [
   W_R,
+  MAFAK,
   EN,
   EN_LK,
   EN_GK,
@@ -150,6 +153,7 @@ const subjects = [
   LF_5,
   LF_6,
   LF_6_7_9,
+  LF_7_10,
   LF_8,
   LF_10,
   LF_11,
@@ -168,17 +172,19 @@ const subjects = [
   CH,
 ];
 
-export function getSubject(value: string): Subject {
+export function getSubjects(value: string): Subject[] {
   const query = value.toLowerCase();
 
-  const subject = subjects.find(
-    (subject) =>
-      subject.name.toLowerCase() === query || subject.aliases?.includes(query)
-  );
+  const foundSubjects = SUBJECTS.filter((subject) => subject.aliases?.includes(query));
+  const foundNameSubject = SUBJECTS.find((subject) => subject.name.toLowerCase() === query);
+  if (foundNameSubject) {
+    foundSubjects.splice(0, 0, foundNameSubject);
+    // return [foundNameSubject, ...foundSubjects];
+  }
 
-  if (!subject) {
+  if (foundSubjects.length === 0) {
     throw new Error(`Unable to find subject "${query}".`);
   }
 
-  return subject;
+  return foundSubjects;
 }

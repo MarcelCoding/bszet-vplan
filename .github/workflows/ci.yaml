@@ -4,9 +4,7 @@ on:
   push:
     branches: [main]
     tags: ["v*"]
-
-env:
-  NODE_VERSION: 16
+  pull_request:
 
 jobs:
   build:
@@ -14,53 +12,38 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.2
 
       - uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
 
-      - name: Get npm cache directory
-        id: npm-cache-dir
-        run: |
-          echo "::set-output name=dir::$(npm config get cache)"
+      - run: pnpm install
+      - run: pnpm run build
 
-      - uses: actions/cache@v2
-        id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+      - uses: actions/upload-artifact@v3
         with:
-          path: ${{ steps.npm-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - run: npm ci
-      - run: npm run build
+          name: bszet-vplan
+          path: ./dist
 
   deploy:
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
 
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 2
 
+      - uses: pnpm/action-setup@v2.2.2
+
       - uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
 
-      - name: Get npm cache directory
-        id: npm-cache-dir
-        run: |
-          echo "::set-output name=dir::$(npm config get cache)"
-
-      - uses: actions/cache@v2
-        id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ steps.npm-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - run: npm ci
+      - run: pnpm install
 
       - name: Metadata
         id: meta
@@ -83,15 +66,15 @@ jobs:
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-      - name: Create Sentry release
-        uses: getsentry/action-release@v1
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-        with:
-          environment: ${{ steps.meta.outputs.env }}
-          version: ${{ steps.meta.outputs.version }}
-          sourcemaps: ./dist
-          ignore_missing: true
-          strip_common_prefix: true
+#      - name: Create Sentry release
+#        uses: getsentry/action-release@v1
+#        env:
+#          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+#          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+#          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+#        with:
+#          environment: ${{ steps.meta.outputs.env }}
+#          version: ${{ steps.meta.outputs.version }}
+#          sourcemaps: ./dist
+#          ignore_missing: true
+#          strip_common_prefix: true
