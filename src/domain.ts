@@ -154,7 +154,6 @@ const SUBJECTS = [
   LF_5,
   LF_6,
   LF_6_7_9,
-  LF_7_10,
   LF_8,
   LF_10,
   LF_11,
