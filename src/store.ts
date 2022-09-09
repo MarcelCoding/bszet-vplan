@@ -1,4 +1,4 @@
-import {Changes} from "./domain";
+import { Changes } from "./domain";
 
 const LAST_MODIFIED = "last-modified";
 const CHANGES = "changes";
@@ -8,12 +8,16 @@ export async function getStoredLastModified(): Promise<string | null> {
   return modified === "" ? null : modified;
 }
 
-export async function setStoredLastModified(modified?: string | null): Promise<void> {
+export async function setStoredLastModified(
+  modified?: string | null
+): Promise<void> {
   if (modified === null) {
     modified = "";
   }
 
-  return modified ? await put(LAST_MODIFIED, modified) : await remove(LAST_MODIFIED);
+  return modified
+    ? await put(LAST_MODIFIED, modified)
+    : await remove(LAST_MODIFIED);
 }
 
 export async function getStoredChanges(): Promise<Changes | null> {
@@ -25,7 +29,7 @@ export async function setStoredChanges(changes?: Changes): Promise<void> {
 }
 
 async function get<T>(key: string): Promise<T | null> {
-  return await BSZET_VPLAN.get(key, {type: "json"});
+  return await BSZET_VPLAN.get(key, { type: "json" });
 }
 
 async function put<T>(key: string, value: T): Promise<void> {

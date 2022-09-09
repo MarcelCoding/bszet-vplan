@@ -1,16 +1,30 @@
-import {checkChangesAndUpdate, fetchChangesPdf, parseAndStoreChanges,} from "./changes";
-import {formatDateTime, formatLongDateTime, formatRelativeTime, pdf2Img,} from "./utils";
-import {getIteration} from "./iteration";
-import {Changes, Config, Iteration} from "./domain";
-import {notify} from "./notification";
-import {getActualTimetable, getAsciiTimetable, getDefaultTimetable} from "./timetable";
+import {
+  checkChangesAndUpdate,
+  fetchChangesPdf,
+  parseAndStoreChanges,
+} from "./changes";
+import {
+  formatDateTime,
+  formatLongDateTime,
+  formatRelativeTime,
+  pdf2Img,
+} from "./utils";
+import { getIteration } from "./iteration";
+import { Changes, Config, Iteration } from "./domain";
+import { notify } from "./notification";
+import {
+  getActualTimetable,
+  getAsciiTimetable,
+  getDefaultTimetable,
+  getTimetable,
+} from "./timetable";
 import Toucan from "toucan-js";
 
 export async function vPlanCron(sentry: Toucan): Promise<unknown> {
   const date = new Date();
 
-  let pdf;
-  let changes;
+  let pdf: Blob | undefined;
+  let changes: Changes | undefined;
 
   // starting at 15h display next day
   if (15 <= date.getUTCHours()) {
@@ -32,10 +46,10 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
     throw new Error("Unable to gather iteration.");
   }
 
-  let lastModified;
+  let lastModified: Date | null = null;
 
   try {
-    const {lastModified: lm, modified} = await checkChangesAndUpdate();
+    const { lastModified: lm, modified } = await checkChangesAndUpdate();
     lastModified = lm;
 
     // vplan wasn't modified
@@ -56,38 +70,28 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
         changes = await parseAndStoreChanges(sentry, pdf);
       }
     }
-  }
-  catch (e) {
+  } catch (e) {
     sentry.captureException(e);
     console.error(e);
   }
 
   const config: Config = JSON.parse(CONFIG);
 
-  return await Promise.all([
-    processClass(
-      sentry,
-      date,
-      lastModified,
-      iteration,
-      pdf,
-      changes,
-      "IGD21",
-      config.IGD21.telegram,
-      config.IGD21.discord
-    ),
-    processClass(
-      sentry,
-      date,
-      lastModified,
-      iteration,
-      pdf,
-      changes,
-      "IGD20",
-      config.IGD20.telegram,
-      config.IGD20.discord
-    ),
-  ]);
+  return await Promise.all(
+    Object.entries(config).map(([name, data]) =>
+      processClass(
+        sentry,
+        date,
+        lastModified,
+        iteration,
+        pdf,
+        changes,
+        name,
+        data.telegram,
+        data.discord
+      )
+    )
+  );
 }
 
 async function processClass(
@@ -101,24 +105,64 @@ async function processClass(
   telegram: number[],
   discord: string[]
 ): Promise<unknown> {
+  const work = getTimetable(clazz)?.work;
+  if (work) {
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth();
+    const day = date.getUTCDate();
+
+    const workingTime = work.find(({ start, end }) => {
+      const [sYear, sMonth, sDay] = start;
+      const [eYear, eMonth, eDay] = end;
+
+      if (
+        year >= sYear &&
+        year <= eYear &&
+        month >= sMonth &&
+        month <= eMonth &&
+        day >= sDay &&
+        day <= eDay
+      ) {
+        return true;
+      }
+    });
+
+    if (workingTime) {
+      if (
+        workingTime.start[0] === year &&
+        workingTime.start[1] === month &&
+        workingTime.start[2] === day
+      ) {
+        return await notify(
+          `Ey du Idiot, geht nicht in die Schule! Du musst in deinen Betrieb, idk wo der ist. Am ${workingTime.end[2]}.${workingTime.end[1]}.${workingTime.end[0]} ist dein letzter Arbeitstag.`,
+          undefined,
+          telegram,
+          discord
+        );
+      } else {
+        return;
+      }
+    }
+  }
+
   let day;
   let error = false;
 
   try {
     if (changes) day = await getActualTimetable(clazz, date, changes);
-  }
-  catch (e) {
+  } catch (e) {
     sentry.captureException(e);
     console.error(e);
     error = true;
-  }
-  finally {
+  } finally {
     if (!day) {
-      day = {timetable: getDefaultTimetable(clazz, date, iteration)};
+      day = { timetable: getDefaultTimetable(clazz, date, iteration) };
     }
   }
 
-  const passedTime = lastModified ? formatRelativeTime(lastModified.getTime() - Date.now()) : "kürzlich";
+  const passedTime = lastModified
+    ? formatRelativeTime(lastModified.getTime() - Date.now())
+    : "kürzlich";
 
   let images;
 
@@ -130,21 +174,22 @@ async function processClass(
         `${passedTime} aktualisiert`,
         `Turnus ${iteration}`
       );
-    }
-    catch (e) {
+    } catch (e) {
       sentry.captureException(e);
       console.error(e);
     }
   }
 
-  let message = `Der Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Marcel weitergeben.\n\nVertretungsplan für ${formatLongDateTime(
+  let message = `Der Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Klemens (IGD21) weitergeben.\n\nVertretungsplan für ${formatLongDateTime(
     date
   )}. Der aktuelle Turnus ist ${iteration}.\n\n\`\`\`\n${getAsciiTimetable(
     day.timetable
   )}\n\`\`\``;
 
   if (!changes || error) {
-    message = "Beim Verarbeiten des Vertretungsplans ist ein Fehler aufgetreten.\n\n**> ACHTUNG UNTEN IST DER NORMALE STUNDENPLAN <**\n\n" + message;
+    message =
+      "Beim Verarbeiten des Vertretungsplans ist ein Fehler aufgetreten.\n\n**> ACHTUNG UNTEN IST DER NORMALE STUNDENPLAN <**\n\n" +
+      message;
   }
 
   return await notify(message, images, telegram, discord);

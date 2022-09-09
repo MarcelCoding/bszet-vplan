@@ -4,7 +4,7 @@ import { getActualTimetable, getDefaultTimetable } from "./timetable";
 import { fetchChanges } from "./changes";
 import { vPlanCron } from "./vplan";
 import Toucan from "toucan-js";
-import {getIteration} from "./iteration";
+import { getIteration } from "./iteration";
 
 async function handleCron(sentry: Toucan): Promise<void> {
   return await new Promise((resolve, reject) => {
@@ -103,7 +103,7 @@ const router = Router()
     }
 
     return new Response(
-      JSON.stringify(getDefaultTimetable(clazz, date,iteration), (k, v) =>
+      JSON.stringify(getDefaultTimetable(clazz, date, iteration), (k, v) =>
         v === undefined ? null : v
       ),
       {

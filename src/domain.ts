@@ -43,9 +43,15 @@ export interface Timetable {
   wed: Day;
   thu: Day;
   fri: Day;
+  work?: Worktime[];
 }
 
 export type Day = Lesson[];
+
+export interface Worktime {
+  start: [number, number, number]; // inclusive
+  end: [number, number, number]; // inclusive
+}
 
 export interface Change<T> {
   from: T;
@@ -177,8 +183,12 @@ const SUBJECTS = [
 export function getSubjects(value: string): Subject[] {
   const query = value.toLowerCase();
 
-  const foundSubjects = SUBJECTS.filter((subject) => subject.aliases?.includes(query));
-  const foundNameSubject = SUBJECTS.find((subject) => subject.name.toLowerCase() === query);
+  const foundSubjects = SUBJECTS.filter((subject) =>
+    subject.aliases?.includes(query)
+  );
+  const foundNameSubject = SUBJECTS.find(
+    (subject) => subject.name.toLowerCase() === query
+  );
   if (foundNameSubject) {
     foundSubjects.splice(0, 0, foundNameSubject);
     // return [foundNameSubject, ...foundSubjects];
