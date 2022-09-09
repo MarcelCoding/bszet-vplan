@@ -6,11 +6,11 @@ import {
   Timetable,
   TimetableChange,
 } from "../domain";
-import {applyChanges} from "./changes";
-import {applyIteration, getIteration} from "../iteration";
-import {IGD21} from "./igd21";
-import {IGD20} from "./igd20";
-import {getBorderCharacters, table} from "table";
+import { applyChanges } from "./changes";
+import { applyIteration, getIteration } from "../iteration";
+import { IGD21 } from "./igd21";
+import { IGD20 } from "./igd20";
+import { getBorderCharacters, table } from "table";
 
 const tableBorderCharacters = getBorderCharacters("void");
 
@@ -20,7 +20,7 @@ export function getAsciiTimetable(timetable: Day): string {
   return (
     table(
       timetable.map((lesson) => formatLesson(lesson, hasNote)),
-      {border: tableBorderCharacters}
+      { border: tableBorderCharacters }
     )
       // workaround to remove space on front and behind table (issue #17)
       .split("\n")
@@ -57,14 +57,19 @@ function formatSubject(lesson: Lesson): string {
     : lesson.subject.name;
 }
 
-export function getDefaultTimetable(clazz: string, date: Date, iteration: Iteration) {
+export function getDefaultTimetable(
+  clazz: string,
+  date: Date,
+  iteration: Iteration
+) {
   const fullTimetable = getTimetable(clazz);
   if (!fullTimetable) {
     throw new Error(`Class "${clazz}" not found.`);
   }
 
-  return getDay(fullTimetable, date)
-    .filter(lesson => !lesson.iteration || lesson.iteration === iteration);
+  return getDay(fullTimetable, date).filter(
+    (lesson) => !lesson.iteration || lesson.iteration === iteration
+  );
 }
 
 export async function getActualTimetable(
@@ -96,10 +101,10 @@ export async function getActualTimetable(
 
   applyChanges(clone, changes);
 
-  return {timetable: clone, changes, iteration};
+  return { timetable: clone, changes, iteration };
 }
 
-function getTimetable(clazz: string): Timetable | null {
+export function getTimetable(clazz: string): Timetable | null {
   switch (clazz.toUpperCase()) {
     case "IGD21":
       return IGD21;

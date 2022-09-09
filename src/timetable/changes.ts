@@ -45,8 +45,8 @@ function handleCancel(timetable: Day, change: TimetableChange): void {
   const subjects = getSubjects(change.subject.from);
 
   let lesson: Lesson | undefined;
-  subjects.every((subject) =>
-      !(lesson = getLesson(timetable, change.lesson, subject))
+  subjects.every(
+    (subject) => !(lesson = getLesson(timetable, change.lesson, subject))
   );
 
   if (!lesson) {
@@ -77,15 +77,21 @@ function handleChange(timetable: Day, change: TimetableChange): boolean {
     );
   }
 
-  const subjectNames = getSubjects(change.subject.from).map((subject) => subject.name);
-  const lesson = lessons.find((lesson) => subjectNames.includes(lesson.subject.name));
+  const subjectNames = getSubjects(change.subject.from).map(
+    (subject) => subject.name
+  );
+  const lesson = lessons.find((lesson) =>
+    subjectNames.includes(lesson.subject.name)
+  );
 
   if (!lesson) {
     const expectedSubjects = JSON.stringify(
       lessons.map((lesson) => lesson.subject.name)
     );
     throw new Error(
-      `Can not match subjects, expected: ${expectedSubjects}, actual: ${JSON.stringify(subjectNames)}`
+      `Can not match subjects, expected: ${expectedSubjects}, actual: ${JSON.stringify(
+        subjectNames
+      )}`
     );
   }
 
@@ -116,7 +122,9 @@ function handleChange(timetable: Day, change: TimetableChange): boolean {
  * @return if the timetable has to be sorted
  */
 function handleAdd(timetable: Day, change: TimetableChange): boolean {
-  const canceledLesson = getLessons(timetable, change.lesson).find(lesson => lesson.cancel);
+  const canceledLesson = getLessons(timetable, change.lesson).find(
+    (lesson) => lesson.cancel
+  );
 
   if (canceledLesson) {
     canceledLesson.subject = getSubjects(change.subject.to)[0];
@@ -152,11 +160,8 @@ function getLesson(
   );
 }
 
-function getLessons(
-    timetable: Day,
-    time: number,
-): Lesson[] {
-  return timetable.filter(lesson => lesson.time.start === time);
+function getLessons(timetable: Day, time: number): Lesson[] {
+  return timetable.filter((lesson) => lesson.time.start === time);
 }
 
 function applyMessage(lesson: Lesson, message: string): void {
