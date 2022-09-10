@@ -82,6 +82,10 @@ export interface Changes {
 }
 
 export interface Config {
+  IGD22: {
+    //telegram: number[];
+    discord: string[];
+  };
   IGD21: {
     telegram: number[];
     discord: string[];
