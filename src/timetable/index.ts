@@ -11,6 +11,7 @@ import { applyIteration, getIteration } from "../iteration";
 import { IGD21 } from "./igd21";
 import { IGD20 } from "./igd20";
 import { getBorderCharacters, table } from "table";
+import { IGD22 } from "./igd22";
 
 const tableBorderCharacters = getBorderCharacters("void");
 
@@ -106,6 +107,8 @@ export async function getActualTimetable(
 
 export function getTimetable(clazz: string): Timetable | null {
   switch (clazz.toUpperCase()) {
+    case "IGD22":
+      return IGD22;
     case "IGD21":
       return IGD21;
     case "IGD20":
