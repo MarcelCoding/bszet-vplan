@@ -11,7 +11,7 @@ import { applyIteration, getIteration } from "../iteration";
 import { IGD21 } from "./igd21";
 import { IGD20 } from "./igd20";
 import { getBorderCharacters, table } from "table";
-import {IGD22} from "./igd22";
+import { IGD22 } from "./igd22";
 
 const tableBorderCharacters = getBorderCharacters("void");
 
