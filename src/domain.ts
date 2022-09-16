@@ -83,7 +83,7 @@ export interface Changes {
 
 export interface Config {
   IGD22: {
-    //telegram: number[];
+    telegram: number[];
     discord: string[];
   };
   IGD21: {
@@ -134,7 +134,6 @@ export const LF_5: Subject = { name: "LF 5", aliases: ["is"] };
 export const LF_6: Subject = { name: "LF 6", aliases: ["info1", "info2"] };
 export const LF_6_7_9: Subject = { name: "LF 6+7+9" };
 export const LF_8: Subject = { name: "LF 8", aliases: ["lf8d_i1"] };
-export const LF_8_X: Subject = { name: "LF 8 + X" };
 export const LF_9_12: Subject = { name: "LF 9+12" };
 export const LF_10: Subject = { name: "LF 10" };
 export const LF_11: Subject = { name: "LF 11" };
@@ -142,7 +141,7 @@ export const LF_13: Subject = { name: "LF 13" };
 export const BK: Subject = { name: "BK", aliases: ["bk2"] };
 export const BK_1: Subject = { name: "BK 1" };
 export const BK_2: Subject = { name: "BK 2" };
-export const IS: Subject = { name: "IS", aliases: ["is1", "is2"] };
+// export const IS: Subject = { name: "IS", aliases: ["is1", "is2"] };
 export const LIT: Subject = { name: "Lit" };
 export const SP: Subject = { name: "Sp" };
 export const GE: Subject = { name: "Ge", aliases: ["ggk"] };
@@ -155,10 +154,10 @@ export const CH: Subject = { name: "Ch" };
 
 const SUBJECTS = [
   W_R,
-  MAFAK,
   EN,
   EN_LK,
   EN_GK,
+  MAFAK,
   MA,
   MA_LK,
   MA_GK,
@@ -176,7 +175,7 @@ const SUBJECTS = [
   BK,
   BK_1,
   BK_2,
-  IS,
+  // IS,
   LIT,
   SP,
   GE,
