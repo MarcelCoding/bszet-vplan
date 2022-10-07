@@ -40,7 +40,7 @@ function formatLesson(lesson: Lesson, note: boolean): unknown[] {
   const data = [
     lesson.time.start + ".",
     lesson.cancel
-      ? `Ausfall (${formatSubject(lesson)})`
+      ? `A (${formatSubject(lesson)})`
       : formatSubject(lesson),
     room,
   ];
@@ -54,7 +54,7 @@ function formatLesson(lesson: Lesson, note: boolean): unknown[] {
 
 function formatSubject(lesson: Lesson): string {
   return lesson.group
-    ? lesson.subject.name + ", Gr. " + lesson.group
+    ? lesson.subject.name + "/G" + lesson.group
     : lesson.subject.name;
 }
 
