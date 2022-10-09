@@ -152,10 +152,10 @@ async function processClass(
     sentry.captureException(e);
     console.error(e);
     error = true;
-  } finally {
-    if (!day) {
-      day = { timetable: getDefaultTimetable(clazz, date, iteration) };
-    }
+  }
+
+  if (!day) {
+    day = { timetable: getDefaultTimetable(clazz, date, iteration) };
   }
 
   const passedTime = lastModified
