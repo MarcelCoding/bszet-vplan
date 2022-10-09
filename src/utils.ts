@@ -12,7 +12,6 @@ const dateTimeFormat = new Intl.DateTimeFormat(locale, {
 });
 
 const longDateTimeFormat = new Intl.DateTimeFormat(locale, {
-  timeStyle: "short",
   dateStyle: "full",
   timeZone: "Europe/Berlin",
 });
