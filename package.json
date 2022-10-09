@@ -17,7 +17,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^3.16.0",
     "@cloudflare/wrangler": "^1.20.0",
-    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-commonjs": "^23.0.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-typescript": "^8.5.0",
     "prettier": "^2.7.1",
