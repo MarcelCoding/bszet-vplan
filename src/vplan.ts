@@ -178,15 +178,15 @@ async function processClass(
     }
   }
 
-  let message = `\n\`\`\`\n${getAsciiTimetable(
+  let message = `\`\`\`\n${getAsciiTimetable(
     day.timetable
-  )}\n\`\`\`\nDer Vertretungsplan wurde ${passedTime} aktualisiert. Alle fehlerhaften Daten bitte mit Screenshot des VPlans an Klemens (IGD21) weitergeben.\n\nVertretungsplan für ${formatLongDateTime(
+  )}\n\`\`\`\nDer Vertretungsplan wurde ${passedTime} aktualisiert.\nVertretungsplan für ${formatLongDateTime(
     date
-  )}. Der aktuelle Turnus ist ${iteration}.`;
+  )}. Der aktuelle Turnus ist ${iteration}.\n\nAlle fehlerhaften Daten bitte an Klemens (IGD21) weitergeben.`;
 
   if (!changes || error) {
     message =
-      "Beim Verarbeiten des Vertretungsplans ist ein Fehler aufgetreten.\n\n**> ACHTUNG UNTEN IST DER NORMALE STUNDENPLAN <**\n\n" +
+      "Ein Fehler ist aufgetreten.\n\n**> NORMALE STUNDENPLAN <**\n\n" +
       message;
   }
 
