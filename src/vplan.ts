@@ -186,7 +186,7 @@ async function processClass(
 
   if (!changes || error) {
     message =
-      "Ein Fehler ist aufgetreten.\n\n**> NORMALE STUNDENPLAN <**\n\n" +
+      "Ein Fehler ist aufgetreten.\n**> NORMALE STUNDENPLAN <**\n" +
       message;
   }
 
