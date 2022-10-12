@@ -16,7 +16,7 @@ async function sendImages(
   chatId: number,
   message: string,
   images: string[]
-): Promise<unknown> {
+): Promise<void> {
   let url: string;
   let body: {
     media?: {
@@ -43,19 +43,31 @@ async function sendImages(
     body.media![0].parse_mode = "markdown";
   }
 
-  return await fetch(`${API_BASE_URL}/${url}`, {
+  const response = await fetch(`${API_BASE_URL}/${url}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: createBody(chatId, body),
   });
+
+  if (!response.ok) {
+    throw new Error(
+      `Unable to send telegram notification: ${await response.text()}`
+    );
+  }
 }
 
-async function sendMessage(chatId: number, message: string) {
-  return await fetch(`${API_BASE_URL}/sendMessage`, {
+async function sendMessage(chatId: number, message: string): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: createBody(chatId, { text: message, parse_mode: "markdown" }),
   });
+
+  if (!response.ok) {
+    throw new Error(
+      `Unable to send telegram notification: ${await response.text()}`
+    );
+  }
 }
 
 function createBody(chatId: number, body: object): string {
