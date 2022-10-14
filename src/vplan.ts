@@ -42,10 +42,6 @@ export async function vPlanCron(sentry: Toucan): Promise<unknown> {
   }
 
   const iteration = getIteration(date);
-  if (!iteration) {
-    throw new Error("Unable to gather iteration.");
-  }
-
   let lastModified: Date | null = null;
 
   try {
@@ -98,7 +94,7 @@ async function processClass(
   sentry: Toucan,
   date: Date,
   lastModified: Date | undefined | null,
-  iteration: Iteration,
+  iteration: Iteration | null,
   pdf: Blob | undefined,
   changes: Changes | undefined,
   clazz: string,
@@ -141,6 +137,13 @@ async function processClass(
         return;
       }
     }
+  }
+
+  if (!iteration) {
+    const error = new Error("Unable to gather iteration.");
+    sentry.captureException(error);
+    console.error(error);
+    return;
   }
 
   let day;
@@ -186,8 +189,7 @@ async function processClass(
 
   if (!changes || error) {
     message =
-      "Ein Fehler ist aufgetreten.\n**> NORMALE STUNDENPLAN <**\n" +
-      message;
+      "Ein Fehler ist aufgetreten.\n**> NORMALE STUNDENPLAN <**\n" + message;
   }
 
   return await notify(message, images, telegram, discord);
