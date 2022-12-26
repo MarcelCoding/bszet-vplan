@@ -12,7 +12,7 @@
   "dependencies": {
     "itty-router": "^2.6.6",
     "table": "^6.8.0",
-    "toucan-js": "^2.7.0"
+    "toucan-js": "^3.1.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.17.0",
